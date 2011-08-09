@@ -6,8 +6,12 @@ class dT extends Ordrin {
     private
         $_date;
 
-    function __construct() {
-        $this->_date = getdate(); // NOW
+    function __construct($date) {
+        if (!$date) {
+            $this->_date = getdate();
+        } else {
+            $this->_date = $date; 
+        }
     }
 
     function asap () {

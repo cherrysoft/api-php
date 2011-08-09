@@ -27,11 +27,11 @@ class Address extends Ordrin {
             // do ALL validation
             if (!preg_match('/(^\d{5}$)|(^\d{5}-\d{4}$)/', $this->zip)) {
                 parent::$_errors[] = 'Address - validation - zip code (invalid) (' . $this->zip . ')';
-            } elseif (!preg_match('/(^\(?(\d{3})\)?[- .]?(\d{3})[- .]?(\d{4})$)/', $this->phone)) {
+            } elseif (!preg_match('/(^\(?(\d{3})\)?[- .]?(\d{3})[- .]?(\d{4})$)/', $this->phone) && $this->phone != "") {
                 parent::$_errors[] = 'Address - validation - phone number (invalid) (' . $this->phone . ')';
             } elseif (!preg_match('/[A-z.-]/', $this->city)) {
                 parent::$_errors[] = 'Address - validation - city (invalid, only letters/spaces allowed) (' . $this->city . ')';
-            } elseif (!preg_match('/^([A-z]){2}$/', $this->state)) {
+            } elseif (!preg_match('/^([A-z]){2}$/', $this->state)  && $this->$state != "") {
                 parent::$_errors[] = 'Address - validation - state (invalid, only letters allowed and must be passed as two-letter abbreviation) (' . $this->state . ')';
             }
         }

@@ -7,8 +7,6 @@ Usage
 -----
 	require_once('Ordrin.php');
 	
-	Ordrin->initialize("shds1d6c4BGDGs8", "http://localhost") # developer key and site where hosted
-
     $dt = new dT();
     $dt->asap();
 
