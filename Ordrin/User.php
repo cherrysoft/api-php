@@ -6,7 +6,7 @@ class User extends Ordrin {
     }
     
     function makeAcct($email, $password, $fName, $lName) {
-        $this->_request(array(
+        return $this->_request(array(
                              'type' => 'POST',
                              'method' => 'uN',
                              'url_params' => array(
@@ -21,7 +21,7 @@ class User extends Ordrin {
     }
 
     function getAcct() {
-        $this->_request(array(
+        return $this->_request(array(
                              'type' => 'GET',
                              'method' => 'u',
                              'url_params' => array(
@@ -33,7 +33,7 @@ class User extends Ordrin {
 
     function getAddress($addrNick = '') {
         if (!empty($addrNick)) {
-            $this->_request(array(
+            return $this->_request(array(
                                  'type' => 'GET',
                                  'method' => 'u',
                                  'url_params' => array(
@@ -44,7 +44,7 @@ class User extends Ordrin {
                                  'data_params' => array(),
                             ));
         } else {
-            $this->_request(array(
+            return $this->_request(array(
                                  'type' => 'GET',
                                  'method' => 'u',
                                  'url_params' => array(
@@ -60,7 +60,7 @@ class User extends Ordrin {
     function updateAddress($addr) {
         $addr->validate();
 
-        $this->_request(array(
+        return $this->_request(array(
                              'type' => 'PUT',
                              'method' => 'u',
                              'url_params' => array(
@@ -80,7 +80,7 @@ class User extends Ordrin {
     }
 
     function deleteAddress($addrNick) {
-        $this->_request(array(
+        return $this->_request(array(
                              'type' => 'DELETE',
                              'method' => 'u',
                              'url_params' => array(
@@ -94,7 +94,7 @@ class User extends Ordrin {
 
     function getCard($cardNick = '') {
         if (!empty($cardNick)) {
-            $this->_request(array(
+            return $this->_request(array(
                                  'type' => 'GET',
                                  'method' => 'u',
                                  'url_params' => array(
@@ -105,7 +105,7 @@ class User extends Ordrin {
                                  'data_params' => array()
                             ));
         } else {
-            $this->_request(array(
+            return $this->_request(array(
                                  'type' => 'GET',
                                  'method' => 'u',
                                  'url_params' => array(
@@ -120,7 +120,7 @@ class User extends Ordrin {
     function updateCard($cardNick, $name, $number, $cvv, $expiryMonth, $expiryYear, $addr) {
         $addr->validate();
 
-        $this->_request(array(
+        return $this->_request(array(
                              'type' => 'PUT',
                              'method' => 'u',
                              'url_params' => array(
@@ -144,7 +144,7 @@ class User extends Ordrin {
     }
 
     function deleteCard($cardNick) {
-        $this->_request(array(
+        return $this->_request(array(
                             'type' => 'DELETE',
                             'method' => 'u',
                             'url_params' => array(
@@ -157,7 +157,7 @@ class User extends Ordrin {
     }
 
     function orderHistory($orderID='') {
-        if (!empty($orderID)) $this->_request(array(
+        if (!empty($orderID)) return $this->_request(array(
                                                    'type' => 'GET',
                                                    'method' => 'u',
                                                    'url_params' => array(
@@ -167,7 +167,7 @@ class User extends Ordrin {
                                                    ),
                                                    'data_params' => array()
                                               ));
-        else $this->_request(array(
+        else return $this->_request(array(
                                   'type' => 'GET',
                                   'method' => 'u',
                                   'url_params' => array(
@@ -179,7 +179,7 @@ class User extends Ordrin {
     }
 
     function updatePassword($password) {
-        $this->_request(array(
+        return $this->_request(array(
                              'type' => 'PUT',
                              'method' => 'u',
                              'url_params' => array(

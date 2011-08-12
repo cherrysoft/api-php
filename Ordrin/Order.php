@@ -37,7 +37,7 @@ class Order extends Ordrin {
             $time = $dT->_strAPI('hour') . ':' . $dT->_strAPI('minute');
         }
 
-        $this->_request(array(
+        return $this->_request(array(
                              'type' => 'POST',
                              'method' => 'o',
                             'url_params' => array(

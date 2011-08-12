@@ -10,7 +10,7 @@ class Restaurant extends Ordrin {
     function deliveryList($dt, $addr) {
         $addr->validate();
 
-        $this->_request(array(
+        return $this->_request(array(
                              'type' => 'GET',
                              'method' => 'dl',
                              'url_params' => array(
@@ -30,7 +30,7 @@ class Restaurant extends Ordrin {
         }
 
         $addr->validate();
-        $this->_request(array(
+        return $this->_request(array(
                              'type' => 'GET',
                              'method' => 'dc',
                              'url_params' => array(
@@ -49,7 +49,7 @@ class Restaurant extends Ordrin {
         }
 
         $addr->validate();
-        $this->_request(array(
+        return $this->_request(array(
                              'type' => 'GET',
                              'method' => 'fee',
                             'url_params' => array(
@@ -70,7 +70,7 @@ class Restaurant extends Ordrin {
             parent::$_errors[] = "Restaurant DeliveryCheck - Validation - restaurant ID (invalid, must be numeric) we got ($rID)";
         }
 
-        $this->_request(array(
+        return $this->_request(array(
                              'type' => 'GET',
                              'method' => 'rd',
                              'url_params' => array($rID),

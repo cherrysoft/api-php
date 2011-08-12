@@ -85,10 +85,12 @@ class Ordrin {
 
     /* Protected Functions */
     protected  function _request($data) {
+        /*
         echo "DEBUG :: Request started.. \n";
         echo "---------------------------------------------\n";
         echo print_r($data,true);
         echo "---------------------------------------------\n";
+        */
 
         if (!$this->_key) self::$_errors[] = 'initialization - must initialize with developer key for api';
         elseif (!$this->_url) self::$_errors[] = 'initialization - must initialize with site at which API is running';
@@ -97,10 +99,7 @@ class Ordrin {
         $type = $data['type'];
         $method = $data['method'];
         $headers = array();
-
-        echo 'DEBUG :: ' . $type . "\n";
         
-
         $headers[] = 'X-NAAMA-CLIENT-AUTHENTICATION: id="' . $this->_key . '", version="1"';
         $headers[] = 'Content-Type: application/x-www-form-urlencoded';
 
@@ -133,17 +132,20 @@ class Ordrin {
 
         unset($origMethod);
         
+        /*
         echo "URL Append: " . $url_params . "\n";
         echo "DATA: $_data\n";
 
         echo "DO: " . $this->_url . $url_params . "\n";
 
         echo "\n\n";
+        
+        echo 'Headers: ' . print_r($headers,true);
+        */
+        
         if (!empty(self::$_errors)) {
             throw new Exception('Errors encountered: ' . implode('\n', self::$_errors));
         }
-
-        echo 'Headers: ' . print_r($headers,true);
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_TIMEOUT, 10);
@@ -191,10 +193,12 @@ class Ordrin {
             $respInfo = curl_getinfo($ch);
 
         }
-
-        echo "\nRespBody : " . print_r(json_decode($respBody), true);
-        echo "\nRespInfo : " . print_r($respInfo,true);
+        
         curl_close($ch);
+        return json_decode($respBody);
+        
+        // echo "\nRespInfo : " . print_r($respInfo,true);
+        
     }
 
 

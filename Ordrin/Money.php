@@ -15,7 +15,7 @@ class Money extends Ordrin {
     }
 
     function _convertForAPI() {
-        return $this->amount * 100.00;
+        return $this->amount;
     }
 }
 
