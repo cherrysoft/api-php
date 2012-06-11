@@ -1,4 +1,4 @@
-Ordr.in Python API
+Ordr.in PHP API v2.0
 ==================
 
 A PHP wrapper for the Restaurant, User, and Order APIs provided by Ordr.in. The main API documentation can be found at http://ordr.in/developers.
