@@ -7,16 +7,16 @@ A PHP wrapper for the Restaurant, User, and Order APIs provided by Ordr.in. The 
 Data Structures
 ---------------
 
-```python
-ordrin.data.Address(addr, city, state, zip, phone, addr2='')
+```php
+$ordrin->Address(address, city, state, zip, phone, address2);
 
-ordrin.data.CreditCard(name, expiry_month, expiry_year, bill_address, number, cvc)
+$ordrin->creditCard(name, expiration_month, expiration_year, number, cvc, address)
 
 ordrin.data.UserLogin(email, password)
 
-ordrin.data.TrayItem(item_id, quantity, *options)
+$ordrin->trayItem(item_id, quantity, *options)
 
-ordrin.data.Tray(*items)
+$ordrin->tray(*items)
 ```
 
 Exceptions
@@ -36,15 +36,15 @@ API Initialization
 There are two key ways to initialize the OrdrinApi. First you can initialize it using the standard test or demo servers like so.
 ```php
 // initialize with ordr.in test servers
-$ordrin = new OrdrinApi(API_KEY,OrdrinApi::TEST_SERVERS);
+$ordrin = new OrdrinApi(API_KEY, OrdrinApi::TEST_SERVERS);
 
 // initialize for production
-$ordrin = new OrdrinApi(API_KEY,OrdrinApi::PROD_SERVERS);
+$ordrin = new OrdrinApi(API_KEY, OrdrinApi::PROD_SERVERS);
 ```
 
 Second, you can initialize using your own custom server urls like this:
 ```php
-$ordrin = new OrdrinApi(API_KEY,OrdrinApi::CUSTOM_SERVERS,restaurant_test_server,user_test_server,order_test_server);
+$ordrin = new OrdrinApi(API_KEY, OrdrinApi::CUSTOM_SERVERS, restaurant_url, user_url, order_url);
 ```
 
 Restaurant API Functions
@@ -59,7 +59,7 @@ $ordrin->restaurant->getDeliveryList(date_time, address);
 $ordrin->restaurant->deliveryCheck(restaurant_id, date_time, address);
 
 // Caluclates all fees for a given subtotal and delivery address
-$ordrin->restaurant->deliveryFee(restaurant_id,subtota.,tip,date_time,address);
+$ordrin->restaurant->deliveryFee(restaurant_id, subtotal, tip, date_time, address);
 
 // Provides restaurant details to allow display of a restaurant's menu page
 $ordrin->restaurant->details(restaurant_id)
@@ -71,13 +71,13 @@ You can use the follow methods to interact with the Ordr.in User API:
 
 ```php
 // Set the user credentials you'll be using
-$ordrin->user->authenticate(email,sha256encodedpw);
+$ordrin->user->authenticate(email, sha256encodedpw);
 
 // Get Account Information
 $ordrin->user->getAccountInfo();
 
 // Create New Account
-$ordrin->user->create(email,sha256encodedpw,first_name,last_name)
+$ordrin->user->create(email, sha256encodedpw, first_name, last_name)
 
 // Get all saved addresses
 $ordrin->user->getAddress();
@@ -86,7 +86,7 @@ $ordrin->user->getAddress();
 $ordrin->user->getAddress(address_nickame);
 
 // Add/Edit a single saved address
-$ordrin->user->setAddress(address_nickname,address);
+$ordrin->user->setAddress(address_nickname, address);
 
 // Remove an address from the user's saved addresses
 $ordrin->user->deleteAddress(address_nickname);
@@ -98,7 +98,7 @@ $ordrin->user->getCard();
 $ordrin->user->getCard(card_nickname);
 
 // Add/Edit a single saved credit card
-$ordrin->user->setCard(card_nick,cardholder_name,card_number,ccv,expire_month,expire_year,address);
+$ordrin->user->setCard(card_nick, cardholder_name, card_number, ccv, expire_month, expire_year, address);
 
 // Remove a credit card from the user's saved cards
 $ordrin->user->deleteCard(card_nick);
@@ -117,8 +117,6 @@ Order API Functions
 -------------------
 You can use the following methods to interact with the Ordr.in Order API
 
-```python
-api.order.order(restaurant_id, tray, tip, delivery_date_time, first_name, last_name, address, credit_card, email=None, login=None)
-
-order_create_user(restaurant_id, tray, tip, delivery_date_time, first_name, last_name, address, credit_card, email, password)
+```php
+$ordrin->order->submit(restaurant_id, tray, tip, delivery_date_time, email, first_name, last_name, address, credit_card)
 ```
