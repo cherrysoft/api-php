@@ -1,15 +1,12 @@
 <?php
 
 /* Address Class */
-class Address {
+class TrayItem {
 
-    function __construct($street, $city, $state, $zip, $phone, $street2=null) {
-        $this->street = $street;
-        $this->city = $city;
-        $this->zip = $zip;
-        $this->street2 = $street2;
-        $this->state = $state;
-        $this->phone = $phone;
+    function __construct($itemId, $quantity, $options = null) {
+      $this->itemId = $itemId;
+      $this->quantity = $quantity;
+      $this->options = $options;
     }
 
     function validate($element = "all") {

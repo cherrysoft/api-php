@@ -1,16 +1,18 @@
 <?php
 
 /* Order API */
-class Order extends Ordrin {
-    function __construct() {
-        // Placeholder
+class Order extends OrdrinApi {
+    function __construct($key,$base_url){
+      $this->_key = $key;
+      $this->base_url = $base_url;
     }
 
-    function submit($rID, $tray, $tip, $dT, $em, $fName, $lName, $addr, $card_name, $card_number, $card_cvc, $card_expiry, $ccAddr) {
-        $addr->validate();
-        $ccAddr->validate();
+    function submit($rID, $tray, $tip, $dateTime, $email, $fName, $lName, $addr, $credit_card) {
+//        $addr->validate();
+//        $ccAddr->validate();
 
         // Validations
+/*
         if (!is_numeric($rID)) {
             parent::$_errors[] = 'Order submit - validation - restaurant ID (invalid, must be numeric) ' . "($rID)";
         }
@@ -36,19 +38,12 @@ class Order extends Ordrin {
             $date = $dT->_strAPI('month') . '-' . $dT->_strAPI('day');
             $time = $dT->_strAPI('hour') . ':' . $dT->_strAPI('minute');
         }
-
-        return $this->_request(array(
-                             'type' => 'POST',
-                             'method' => 'o',
-                            'url_params' => array(
-                                $rID,
-
-                            ),
-                            'data_params' => array(
-                                'tray' => $tray,
-                                'tip' => $tip->_convertForAPI(),
-                                'delivery_date' => $date,
-                                'delivery_time' => $time,
+*/
+        $params =  array(
+                                'tray' => $tray->_convertForAPI(),
+                                'tip' => $tip,
+                                'delivery_date' => "ASAP",
+                                'delivery_time' => "",
                                 'first_name' => $fName,
                                 'last_name' => $lName,
                                 'addr' => $addr->street,
@@ -56,18 +51,33 @@ class Order extends Ordrin {
                                 'state' => $addr->state,
                                 'zip' => $addr->zip,
                                 'phone' => $addr->phone,
-                                'em' => $em,
-                                'card_name' => $card_name,
-                                'card_number' => $card_number,
-                                'card_expiry' => $card_expiry,
-                                'card_cvc' => $card_cvc,
-                                'card_bill_addr' => $ccAddr->street,
-                                'card_bill_addr2' => $ccAddr->street2,
-                                'card_bill_city' => $ccAddr->city,
-                                'card_bill_state' => $ccAddr->state,
-                                'card_bill_zip' => $ccAddr->zip,
-                                'type' => 'RES'
-                            )
-                        ));
+                                'card_name' => $credit_card->name,
+                                'card_number' => $credit_card->number,
+                                'card_expiry' => $credit_card->expiration,
+                                'card_cvc' => $credit_card->cvc,
+                                'card_bill_addr' => $credit_card->address->street,
+                                'card_bill_addr2' => $credit_card->address->street2,
+                                'card_bill_city' => $credit_card->address->city,
+                                'card_bill_state' => $credit_card->address->state,
+                                'card_bill_zip' => $credit_card->address->zip,
+                                'type' => 'res'
+                            );
+
+        $auth = false;
+        if(!isset($email)){
+          $auth = true;
+          $params['password'] = hash('sha256','testtest');
+        } else {
+          $params['em'] = $email;
+        }
+
+        return $this->_call_api('POST',
+                                array(
+                                    'o',
+                                    $rID,
+                                ),
+                                $params,
+                                $auth
+                        );
     }
 }

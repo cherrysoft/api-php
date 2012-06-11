@@ -1,18 +1,20 @@
 <?php
 
-/* Address Class */
-class Address {
+/* Credit Card Class */
+class CreditCard {
 
-    function __construct($street, $city, $state, $zip, $phone, $street2=null) {
-        $this->street = $street;
-        $this->city = $city;
-        $this->zip = $zip;
-        $this->street2 = $street2;
-        $this->state = $state;
-        $this->phone = $phone;
+    function __construct($name, $expMonth, $expYear, $number, $cvc, $address) {
+      $this->name = $name;
+      $this->expMonth = $expMonth;
+      $this->expYear = $expYear;
+      $this->address = $address;
+      $this->cvc = $cvc;
+      $this->number = $number;
+      $this->expiration = $expMonth."/".$expYear;
     }
 
     function validate($element = "all") {
+//        echo "DEBUG:: Address validate for $element\n";
         if ($element == 'zip' && !preg_match('/(^\d{5}$)|(^\d{5}-\d{4}$)/', $this->$element)) {
             parent::$_errors[] = 'Address - validation - zip code (invalid) (' . $this->$element . ')';
         } elseif ($element == 'phone' && !preg_match('/(^\(?(\d{3})\)?[- .]?(\d{3})[- .]?(\d{4})$)/', $this->$element)) {
@@ -42,7 +44,7 @@ class Address {
     }
 
     function _convertForAPI() {
-        return $this->__get('zip') . '/' . $this->__get('city') . '/' . $this->__get('street');
+        //return $this->__get('zip') . '/' . $this->__get('city') . '/' . $this->__get('street');
     }
 
     function __set($name, $value) {

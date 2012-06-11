@@ -1,15 +1,10 @@
 <?php
 
 /* Address Class */
-class Address {
+class Tray {
 
-    function __construct($street, $city, $state, $zip, $phone, $street2=null) {
-        $this->street = $street;
-        $this->city = $city;
-        $this->zip = $zip;
-        $this->street2 = $street2;
-        $this->state = $state;
-        $this->phone = $phone;
+    function __construct($items = null) {
+      $this->items = $items;
     }
 
     function validate($element = "all") {
@@ -42,7 +37,19 @@ class Address {
     }
 
     function _convertForAPI() {
-        return $this->__get('zip') . '/' . $this->__get('city') . '/' . $this->__get('street');
+      $api_string = '';
+      foreach($this->items as $item){
+        if(strlen($api_string) !== 0){
+          $api_string.="+";
+        }
+        $api_string .= $item->itemId.'/'.$item->quantity;
+        if(isset($item->options)) {
+          foreach($item->options as $option){
+            $api_string .= ",".$option;
+          }
+        }
+      }
+      return $api_string;
     }
 
     function __set($name, $value) {

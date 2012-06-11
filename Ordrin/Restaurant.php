@@ -1,27 +1,25 @@
 <?php
 
 /* Restuarant API */
-class Restaurant extends Ordrin {
-
-    function __construct() {
-        // reserved
+class Restaurant extends OrdrinApi {
+    function __construct($key,$base_url){
+      $this->_key = $key;
+      $this->base_url = $base_url;
     }
 
-    function deliveryList($dt, $addr) {
-        $addr->validate();
+    function getDeliveryList($date_time, $address) {
+        //$addr->validate();
 
-        return $this->_request(array(
-                             'type' => 'GET',
-                             'method' => 'dl',
-                             'url_params' => array(
-                                 $dt->_convertForAPI(),
-                                 $addr->zip,
-                                 $addr->city,
-                                 $addr->street
-
-                             ),
-                             'data_params' => array()
-                        ));
+        return $this->_call_api("GET",
+                                array(
+                                  "dl",
+                                  "ASAP",
+                                  $address->zip,
+                                  $address->city,
+                                  $address->street
+                                ),
+                                "GET"
+                        );
     }
 
     function deliveryCheck($rID, $dT, $addr) {
@@ -29,18 +27,17 @@ class Restaurant extends Ordrin {
             parent::$_errors[] = "Restaurant DeliveryCheck - Validation - restaurant ID (invalid, must be numeric) we got ($rID)";
         }
 
-        $addr->validate();
-        return $this->_request(array(
-                             'type' => 'GET',
-                             'method' => 'dc',
-                             'url_params' => array(
-                                 $rID, $dT->_convertForAPI(),
-                                 $addr->zip,
-                                 $addr->city,
-                                 $addr->street
-                             ),
-                            'data_params' => array()
-                        ));
+        //$addr->validate();
+        return $this->_call_api("GET",
+                                array(
+                                 "dc",
+                                 $rID, 
+                                 "ASAP",
+                                 rawurlencode($addr->zip),
+                                 rawurlencode($addr->city),
+                                 rawurlencode($addr->street)
+                             )
+                        );
     }
 
     function deliveryFee($rID, $subtotal, $tip, $dT, $addr) {
@@ -48,21 +45,19 @@ class Restaurant extends Ordrin {
             parent::$_errors[] = "Restaurant DeliveryCheck - Validation - restaurant ID (invalid, must be numeric) we got ($rID)";
         }
 
-        $addr->validate();
-        return $this->_request(array(
-                             'type' => 'GET',
-                             'method' => 'fee',
-                            'url_params' => array(
-                                $rID,
-                                $subtotal->_convertForAPI(),
-                                $tip->_convertForAPI(),
-                                $dT->_convertForAPI(),
-                                $addr->zip,
-                                $addr->city,
-                                $addr->street
-                            ),
-                            'data_params' => array()
-                        ));
+//        $addr->validate();
+        return $this->_call_api("GET",
+                               array(
+                                  "fee",
+                                  $rID,
+                                  $subtotal,
+                                  $tip,
+                                  "ASAP",
+                                  $addr->zip,
+                                  $addr->city,
+                                  $addr->street
+                              )
+                        );
     }
 
     function details($rID) {
@@ -70,11 +65,9 @@ class Restaurant extends Ordrin {
             parent::$_errors[] = "Restaurant DeliveryCheck - Validation - restaurant ID (invalid, must be numeric) we got ($rID)";
         }
 
-        return $this->_request(array(
-                             'type' => 'GET',
-                             'method' => 'rd',
-                             'url_params' => array($rID),
-                             'data_params' => array()
-                        ));
+        return $this->_call_api("GET",
+                               array("rd",$rID)
+                        );
     }
+
 }

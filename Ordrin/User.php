@@ -1,134 +1,141 @@
 <?php
-class User extends Ordrin {
-
-    function __construct() {
-        // Placeholder
+class User extends OrdrinApi {
+    function __construct($key,$base_url){
+      $this->_key = $key;
+      $this->base_url = $base_url;
     }
+
+    public function authenticate($email, $password) {
+      $this->_email = $email;
+      $this->_password = $password;
+    }
+
     
-    function makeAcct($email, $password, $fName, $lName) {
-        return $this->_request(array(
-                             'type' => 'POST',
-                             'method' => 'uN',
-                             'url_params' => array(
-                                 $email,
-                             ),
-                             'data_params' => array(
+    function create($email, $password, $fName, $lName) {
+        return $this->_call_api('POST',
+                                array(
+                                 'u',
+                                 $email
+                                ),
+                                array(
                                  'password' => $password,
                                  'first_name' => $fName,
                                  'last_name' => $lName
-                             ),
-                        ));
+                             )
+                        );
     }
 
-    function getAcct() {
-        return $this->_request(array(
-                             'type' => 'GET',
-                             'method' => 'u',
-                             'url_params' => array(
+    function getAccountInfo() {
+
+        return $this->_call_api('GET',
+                               array(
+                                 'u',
                                  $this->_email
                              ),
-                             'data_params' => array(),
-                        ));
+                             array(
+                                'password' => $this->_password
+                             ),
+                             true
+                        );
     }
 
     function getAddress($addrNick = '') {
         if (!empty($addrNick)) {
-            return $this->_request(array(
-                                 'type' => 'GET',
-                                 'method' => 'u',
-                                 'url_params' => array(
+            return $this->_call_api('GET',
+                                    array(
+                                      'u',
                                      $this->_email,
                                      'addrs',
                                      $addrNick,
-                                 ),
-                                 'data_params' => array(),
-                            ));
+                                    ),
+                                    null,
+                                    true
+                            );
         } else {
-            return $this->_request(array(
-                                 'type' => 'GET',
-                                 'method' => 'u',
-                                 'url_params' => array(
-                                     $this->_email,
-                                     'addrs',
+            return $this->_call_api('GET',
+                                   array(
+                                       'u',
+                                      $this->_email,
+                                      'addrs',
                                  ),
-                                 'data_params' => array(),
-                            ));
+                                 null,
+                                 true
+                            );
 
         }
     }
 
-    function updateAddress($addr) {
-        $addr->validate();
+    function setAddress($nick,$addr) {
+        //$addr->validate();
 
-        return $this->_request(array(
-                             'type' => 'PUT',
-                             'method' => 'u',
-                             'url_params' => array(
-                                 $this->_email,
-                                 'addrs',
-                                 $addr->nick
+        return $this->_call_api('PUT',
+                               array(
+                                'u',
+                                $this->_email,
+                                'addrs',
+                                rawurlencode($nick)
                              ),
-                             'data_params' => array(
+                             array(
                                  'addr' => $addr->street,
                                  'addr2' => $addr->street2,
                                  'city' => $addr->city,
                                  'state' => $addr->state,
                                  'zip' => $addr->zip,
                                  'phone' => $addr->phone,
-                             )
-                        ));
+                             ),
+                             true
+                        );
     }
 
     function deleteAddress($addrNick) {
-        return $this->_request(array(
-                             'type' => 'DELETE',
-                             'method' => 'u',
-                             'url_params' => array(
-                                 'email',
-                                 'addrs',
-                                 $addrNick
-                             ),
-                             'data_params' => array()
-                        ));
+        return $this->_call_api('DELETE',
+                               array(
+                                    'u',
+                                    $this->_email,
+                                    'addrs',
+                                    rawurlencode($addrNick)
+                              ),
+                              null,
+                              true
+                        );
     }
 
     function getCard($cardNick = '') {
         if (!empty($cardNick)) {
-            return $this->_request(array(
-                                 'type' => 'GET',
-                                 'method' => 'u',
-                                 'url_params' => array(
-                                     $this->_email,
-                                     "ccs",
-                                     $cardNick
+            return $this->_call_api('GET',
+                                    array(
+                                      'u',
+                                      $this->_email,
+                                      "ccs",
+                                      rawurlencode($cardNick)
                                  ),
-                                 'data_params' => array()
-                            ));
+                                 null,
+                                 true
+                            );
         } else {
-            return $this->_request(array(
-                                 'type' => 'GET',
-                                 'method' => 'u',
-                                 'url_params' => array(
+            return $this->_call_api('GET',
+                                   array(
+                                     'u',
                                      $this->_email,
-                                     "ccs",
-                                 ),
-                                 'data_params' => array()
-                            ));
+                                     'ccs'
+                                  ),
+                                 null,
+                                 true
+                            );
         }
     }
 
-    function updateCard($cardNick, $name, $number, $cvv, $expiryMonth, $expiryYear, $addr) {
-        $addr->validate();
+    function setCard($cardNick, $name, $number, $cvv, $expiryMonth, $expiryYear, $addr) {
+        //$addr->validate();
 
-        return $this->_request(array(
-                             'type' => 'PUT',
-                             'method' => 'u',
-                             'url_params' => array(
+        return $this->_call_api('PUT',
+                               array(
+                                 'u',
                                  $this->_email,
                                  'ccs',
-                                 $cardNick,
+                                 rawurlencode($cardNick),
                              ),
-                             'data_params' => array(
+                             array(
                                  'name' => $name,
                                  'number' => $number,
                                  'cvc' => $cvv,
@@ -140,56 +147,56 @@ class User extends Ordrin {
                                  'bill_state' => $addr->state,
                                  'bill_zip' => $addr->zip,
                              ),
-                        ));
+                             true
+                        );
     }
 
     function deleteCard($cardNick) {
-        return $this->_request(array(
-                            'type' => 'DELETE',
-                            'method' => 'u',
-                            'url_params' => array(
-                                $this->_email,
-                                'ccs',
-                                $cardNick
-                            ),
-                            'data_params' => array(),
-                        ));
+        return $this->_call_api('DELETE',
+                                array(
+                                  'u',
+                                  $this->_email,
+                                  'ccs',
+                                  rawurlencode($cardNick)
+                                ),
+                                null,
+                                true
+                        );
     }
 
-    function orderHistory($orderID='') {
-        if (!empty($orderID)) return $this->_request(array(
-                                                   'type' => 'GET',
-                                                   'method' => 'u',
-                                                   'url_params' => array(
+    function getOrderHistory($orderID='') {
+        if (!empty($orderID)) return $this->_call_api('GET',
+                                                       array('u',
                                                        $this->_email,
                                                        'order',
                                                        $orderID
                                                    ),
-                                                   'data_params' => array()
-                                              ));
-        else return $this->_request(array(
-                                  'type' => 'GET',
-                                  'method' => 'u',
-                                  'url_params' => array(
-                                      $this->_email,
-                                      'orders' => true
-                                  ),
-                                  'data_params' => array()
-                             ));
+                                                   null,
+                                                   true
+                                              );
+        else return $this->_call_api('GET',
+                                     array(
+                                        'u',
+                                        $this->_email,
+                                        'orders'
+                                    ),
+                                    null,
+                                    true
+                             );
     }
 
     function updatePassword($password) {
-        return $this->_request(array(
-                             'type' => 'PUT',
-                             'method' => 'u',
-                             'url_params' => array(
+        return $this->_call_api('PUT',
+                                array(
+                                 'u',
                                  $this->_email,
                                  'password'
-                             ),
-                             'data_params' => array(
-                                 'password' => hash('sha256', $password)
-                             )
-                        ));
+                                ),
+                                array(
+                                 'password' => $password
+                               ),
+                               true
+                        );
     }
 }
 
