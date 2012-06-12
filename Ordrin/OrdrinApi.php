@@ -89,7 +89,10 @@ class OrdrinApi {
      * @return object An object containing the response information
      */
     protected function _call_api($method, $params, $data=null, $login=null) {
-      $uri = '/'.implode("/",$params);
+      $uri = '/';
+      foreach($params as $param) {
+        $uri .= rawurlencode($param) . "/";
+      }
       $request_url = $this->base_url.$uri;
 
       $headers = array();

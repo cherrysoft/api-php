@@ -73,7 +73,7 @@ class User extends OrdrinApi {
                                 'u',
                                 $this->_email,
                                 'addrs',
-                                rawurlencode($nick)
+                                $nick
                              ),
                              array(
                                  'addr' => $addr->street,
@@ -93,7 +93,7 @@ class User extends OrdrinApi {
                                     'u',
                                     $this->_email,
                                     'addrs',
-                                    rawurlencode($addrNick)
+                                    $addrNick
                               ),
                               null,
                               true
@@ -107,7 +107,7 @@ class User extends OrdrinApi {
                                       'u',
                                       $this->_email,
                                       "ccs",
-                                      rawurlencode($cardNick)
+                                      $cardNick
                                  ),
                                  null,
                                  true
@@ -133,7 +133,7 @@ class User extends OrdrinApi {
                                  'u',
                                  $this->_email,
                                  'ccs',
-                                 rawurlencode($cardNick),
+                                 $cardNick,
                              ),
                              array(
                                  'name' => $name,
@@ -157,7 +157,7 @@ class User extends OrdrinApi {
                                   'u',
                                   $this->_email,
                                   'ccs',
-                                  rawurlencode($cardNick)
+                                  $cardNick
                                 ),
                                 null,
                                 true
