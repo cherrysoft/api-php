@@ -16,7 +16,7 @@ class Restaurant extends OrdrinApi {
      * @return object An object containing a list of restaurants that delivery to address
      */
     function getDeliveryList($date_time, $address) {
-        //$addr->validate();
+        $address->validate();
         $dt = $this->format_datetime($date_time);
 
         return $this->_call_api("GET",
@@ -46,7 +46,7 @@ class Restaurant extends OrdrinApi {
         }
         $dt = $this->format_datetime($date_time);
 
-        //$addr->validate();
+        $addr->validate();
         return $this->_call_api("GET",
                                 array(
                                  "dc",
@@ -76,6 +76,7 @@ class Restaurant extends OrdrinApi {
         }
         $dt = $this->format_datetime($date_time);
 
+        $addr->validate();
         return $this->_call_api("GET",
                                array(
                                   "fee",
