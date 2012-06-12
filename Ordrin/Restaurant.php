@@ -17,11 +17,12 @@ class Restaurant extends OrdrinApi {
      */
     function getDeliveryList($date_time, $address) {
         //$addr->validate();
+        $dt = $this->format_datetime($date_time);
 
         return $this->_call_api("GET",
                                 array(
                                   "dl",
-                                  "ASAP",
+                                  $dt,
                                   $address->zip,
                                   $address->city,
                                   $address->street
@@ -43,13 +44,14 @@ class Restaurant extends OrdrinApi {
         if (!is_numeric($rID)) {
             parent::$_errors[] = "Restaurant DeliveryCheck - Validation - restaurant ID (invalid, must be numeric) we got ($rID)";
         }
+        $dt = $this->format_datetime($date_time);
 
         //$addr->validate();
         return $this->_call_api("GET",
                                 array(
                                  "dc",
                                  $rID, 
-                                 "ASAP",
+                                 $dt,
                                  $addr->zip,
                                  $addr->city,
                                  $addr->street
@@ -72,15 +74,15 @@ class Restaurant extends OrdrinApi {
         if (!is_numeric($rID)) {
             parent::$_errors[] = "Restaurant DeliveryCheck - Validation - restaurant ID (invalid, must be numeric) we got ($rID)";
         }
+        $dt = $this->format_datetime($date_time);
 
-//        $addr->validate();
         return $this->_call_api("GET",
                                array(
                                   "fee",
                                   $rID,
                                   $subtotal,
                                   $tip,
-                                  "ASAP",
+                                  $dt,
                                   $addr->zip,
                                   $addr->city,
                                   $addr->street
@@ -88,6 +90,13 @@ class Restaurant extends OrdrinApi {
                         );
     }
 
+    /**
+     * Provide restaurant details to allow display of a restaurant's menu page 
+     *
+     * @param int    $rID       Ordr.in's restaurant identifier 
+     *
+     * @return object An object containing basic & menu information for restaurant
+     */
     function details($rID) {
         if (!is_numeric($rID)) {
             parent::$_errors[] = "Restaurant DeliveryCheck - Validation - restaurant ID (invalid, must be numeric) we got ($rID)";
