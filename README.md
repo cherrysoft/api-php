@@ -3,6 +3,19 @@ Ordr.in PHP API v2.0
 
 A PHP wrapper for the Restaurant, User, and Order APIs provided by Ordr.in. The main API documentation can be found at http://ordr.in/developers.
 
+Installation
+-------------------
+You can install the Ordrin PHP API library by [downloading the source (.zip)](https://github.com/ordrin/api-php/zipball/master).
+
+After you download the library, move the Ordrin folder to your project and include the OrdrinApi file:
+
+```php
+require 'Ordrin/OrdrinApi.php'
+````
+
+Demo
+-------------------
+Included with the library is a basic demo page to help you see how interaction with the Ordr.in API works. Access the demo by browsing to Ordrin/demo.
 
 Data Structures
 ---------------
@@ -116,5 +129,21 @@ Order API Functions
 You can use the following methods to interact with the Ordr.in Order API
 
 ```php
-$ordrin->order->submit(restaurant_id, tray, tip, delivery_date_time, email, first_name, last_name, address, credit_card)
+// submit an anonymous order
+$ordrin->order->submit(restaurant_id, tray, tip, delivery_date_time, email, '', first_name, last_name, address, credit_card)
+
+// submit an order and create an account
+$ordrin->order->submit(restaurant_id, tray, tip, delivery_date_time, email, password, first_name, last_name, address, credit_card)
+
+// submit an order for an authenticated user
+$ordrin->order->submit(restaurant_id, tray, tip, delivery_date_time, '', '', first_name, last_name, address, credit_card, true)
 ```
+
+Prerequisites
+-------------------
+* PHP >= 5.2.1
+* The PHP JSON extension
+
+Providing Feedback
+-------------------
+Using the API and want to give feedback? Notify of us of issues with the [Github Issue Tracker](https://github.com/ordrin/api-php/issues) or join the discussion in our [Google Group](https://groups.google.com/forum/?fromgroups#!forum/ordrin-api).
