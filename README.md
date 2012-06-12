@@ -1,4 +1,4 @@
-Ordr.in PHP API v0.1.0
+Ordr.in PHP API
 ==================
 
 A PHP wrapper for the Restaurant, User, and Order APIs provided by Ordr.in. The main API documentation can be found at http://ordr.in/developers.
