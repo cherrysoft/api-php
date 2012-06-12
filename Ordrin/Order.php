@@ -32,6 +32,9 @@ class Order extends OrdrinApi {
           $time = $this->format_time($date_time);
         }
 
+        $addr->validate();
+        $credit_card->address->validate();
+
         $params =  array(
                                 'restaurant_id' => $rID,
                                 'tray' => $tray->_convertForAPI(),

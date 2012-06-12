@@ -60,7 +60,7 @@ class User extends OrdrinApi {
     }
 
     function setAddress($nick,$addr) {
-        //$addr->validate();
+        $addr->validate();
 
         return $this->_call_api('PUT',
                                array(
