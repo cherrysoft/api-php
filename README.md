@@ -21,7 +21,7 @@ Data Structures
 ---------------
 
 ```php
-$ordrin::Address(address, city, state, zip, phone, address2);
+$ordrin::address(address, city, state, zip, phone, address2);
 
 $ordrin::creditCard(name, expiration_month, expiration_year, number, cvc, address)
 
@@ -32,13 +32,17 @@ $ordrin::tray(*items)
 
 Exceptions
 ----------
+The library will throw exceptions on 3 diferent types of errors: API error, API invalid response and bad value. You'll want ot be sure to catch these exceptions if you want to fail gracefully.
 
-```python
-ordrin.errors.ApiError(msg, text)
+```php
+// Exception thrown when OrdrinApi returns erorr data in json
+OrdrinExceptionApiError(msg)
 
-ordrin.errors.ApiInvalidResponseError(msg)
+// Exception thrown when OrdrinAPI returns an invalid HTTP response
+OrdrinExceptionApiInvalidResponse(msg)
 
-ordrin.errors.BadValueError(msg)
+// Exception thrown when data passed is invalid
+OrdrInExceptionBadValue
 ```
 
 API Initialization
