@@ -96,7 +96,6 @@ class OrdrinApi {
       }
       $request_url = $this->base_url.$uri;
 
-var_dump($request_url);
       $headers = array();
       if($this->_key) {
         $headers[] = 'X-NAAMA-CLIENT-AUTHENTICATION: id="'.$this->_key.'", version="1"';
@@ -123,7 +122,6 @@ var_dump($request_url);
 
       if ($method == 'POST') {
         $post_fields='';
-var_dump($data);
         if(isset($data)){
           $post_fields  = http_build_query($data);
           curl_setopt($ch,CURLOPT_POST,true);
