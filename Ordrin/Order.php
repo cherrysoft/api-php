@@ -7,43 +7,37 @@ class Order extends OrdrinApi {
       $this->base_url = $base_url;
     }
 
-    function submit($rID, $tray, $tip, $dateTime, $email, $fName, $lName, $addr, $credit_card) {
-//        $addr->validate();
-//        $ccAddr->validate();
-
-        // Validations
-/*
-        if (!is_numeric($rID)) {
-            parent::$_errors[] = 'Order submit - validation - restaurant ID (invalid, must be numeric) ' . "($rID)";
-        }
-
-        if (!preg_match($this->_cc_re, $card_number)) {
-            parent::$_errors[] = 'Order submit - validation - credit card number (invalid) ' . "($card_number)";
-        }
-
-        if (!is_numeric($card_cvc)) {
-            parent::$_errors[] = 'Order submit - validation - credit card security code (invalid, must be numeric) ' . "($card_cvc)";
-        }
-
-        if (filter_var($em, FILTER_VALIDATE_EMAIL) === false) {
-            parent::$_errors[] = 'Order submit - validation - email (invalid) ' . "($em)";
-        }
-
-        // Validations are done
-
-        if ($dT->_asap) {
-            $date = "ASAP";
-            $time = "";
+    /**
+     * Order a tray of items 
+     *
+     * @param int     $rID          Ordr.in's restaurant identifier 
+     * @param object  $tray         An object containing a collection of TrayItems to be ordered
+     * @param float   $tip          Tip to be added to order
+     * @param array   $dateTime     Either "ASAP" or the dateTime for order to be delivered
+     * @param string  $email        Email address of customer
+     * @param string  $fName        First name of customer
+     * @param string  $lName        Last name of customer
+     * @param object  $addr         Address object for delivery
+     * @param object  $credit_card  Credit card object for delivery
+     * @param bool    $useAuth      Whether to use user authentication or not
+     *
+     * @return object An object containing information about the order
+     */
+    function submit($rID, $tray, $tip, $date_time, $email, $password='', $fName, $lName, $addr, $credit_card, $useAuth = false) {
+        if(strtoupper($date_time) == 'ASAP') {
+          $date = 'ASAP';
+          $time = '';
         } else {
-            $date = $dT->_strAPI('month') . '-' . $dT->_strAPI('day');
-            $time = $dT->_strAPI('hour') . ':' . $dT->_strAPI('minute');
+          $date = $this->format_date($date_time);
+          $time = $this->format_time($date_time);
         }
-*/
+
         $params =  array(
+                                'restaurant_id' => $rID,
                                 'tray' => $tray->_convertForAPI(),
                                 'tip' => $tip,
-                                'delivery_date' => "ASAP",
-                                'delivery_time' => "",
+                                'delivery_date' => $date,
+                                'delivery_time' => $time,
                                 'first_name' => $fName,
                                 'last_name' => $lName,
                                 'addr' => $addr->street,
@@ -63,12 +57,11 @@ class Order extends OrdrinApi {
                                 'type' => 'res'
                             );
 
-        $auth = false;
-        if(!isset($email)){
-          $auth = true;
-          $params['password'] = hash('sha256','testtest');
-        } else {
+        if(!$useAuth) {
           $params['em'] = $email;
+          if(!empty($password)) {
+            $params['password'] = $password;
+          }
         }
 
         return $this->_call_api('POST',
@@ -77,7 +70,7 @@ class Order extends OrdrinApi {
                                     $rID,
                                 ),
                                 $params,
-                                $auth
+                                $useAuth
                         );
     }
 }
