@@ -89,11 +89,12 @@ class OrdrinApi {
      * @return object An object containing the response information
      */
     protected function _call_api($method, $params, $data=null, $login=null) {
-      $uri = '/';
+      $uri = '';
       foreach($params as $param) {
-        $uri .= rawurlencode($param) . "/";
+        $uri .= "/".rawurlencode($param);
       }
       $request_url = $this->base_url.$uri;
+      rtrim($request_url,"//");
 
       $headers = array();
       if($this->_key) {
@@ -126,12 +127,9 @@ class OrdrinApi {
           curl_setopt($ch,CURLOPT_POST,true);
           curl_setopt($ch,CURLOPT_POSTFIELDS,$post_fields);
         }
-        var_dump($post_fields);
 
         $respBody = curl_exec($ch);
         $respInfo = curl_getinfo($ch);
-
-        $info = curl_getinfo($ch);
       }
 
       if($method == 'PUT') {
@@ -159,6 +157,32 @@ class OrdrinApi {
       curl_close($ch);
 
       return json_decode($respBody);
+    }
+
+    /* formatting helpers */
+    public function format_datetime($date_time) {
+      if(strtoupper($date_time) == 'ASAP') {
+        return 'ASAP';
+      } else {
+        $timestamp = strtotime($date_time);
+        return date('m-d+H:i',$timestamp);
+      }
+    }
+
+    public function format_date($date) {
+      if(strtoupper($date) == 'ASAP') {
+        return 'ASAP';
+      } else {
+        $timestamp = strtotime($date);
+        return date('m-d',$timestamp);
+      }
+    }
+
+    public function format_time($time) {
+      if(!empty($time)) {
+        $timestamp = strtotime($time);
+        return date('H:i',$timestamp);
+      }
     }
 
     /* Data Structure Helpers */
