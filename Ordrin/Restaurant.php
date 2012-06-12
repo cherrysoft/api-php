@@ -42,7 +42,8 @@ class Restaurant extends OrdrinApi {
      */
     function deliveryCheck($rID, $date_time, $addr) {
         if (!is_numeric($rID)) {
-            parent::$_errors[] = "Restaurant DeliveryCheck - Validation - restaurant ID (invalid, must be numeric) we got ($rID)";
+            $_errors = "Restaurant DeliveryCheck - Validation - restaurant ID (invalid, must be numeric) we got ($rID)";
+            throw new OrdrinExceptionBadValue($_errors);
         }
         $dt = $this->format_datetime($date_time);
 
@@ -70,9 +71,10 @@ class Restaurant extends OrdrinApi {
      *
      * @return object An object containing information about the restaurant and fee amount
      */
-    function deliveryFee($rID, $subtotal, $tip, $dT, $addr) {
+    function deliveryFee($rID, $subtotal, $tip, $date_time, $addr) {
         if (!is_numeric($rID)) {
-            parent::$_errors[] = "Restaurant DeliveryCheck - Validation - restaurant ID (invalid, must be numeric) we got ($rID)";
+            $_errors[] = "Restaurant DeliveryCheck - Validation - restaurant ID (invalid, must be numeric) we got ($rID)";
+            throw new OrdrinExceptionBadValue($_errors);
         }
         $dt = $this->format_datetime($date_time);
 
@@ -100,7 +102,8 @@ class Restaurant extends OrdrinApi {
      */
     function details($rID) {
         if (!is_numeric($rID)) {
-            parent::$_errors[] = "Restaurant DeliveryCheck - Validation - restaurant ID (invalid, must be numeric) we got ($rID)";
+            $_errors[] = "Restaurant DeliveryCheck - Validation - restaurant ID (invalid, must be numeric) we got ($rID)";
+            throw new OrdrinExceptionBadvalue($_errors);
         }
 
         return $this->_call_api("GET",
