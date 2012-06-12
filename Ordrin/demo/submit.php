@@ -24,10 +24,10 @@ switch ($_GET["api"]) {
     // don't need to do anything
   break;
   case "u":
-    $ordrin->user->authenticate($_POST['email'],$_POST['pass']);
+    $ordrin->user->authenticate($_POST['email'],hash('sha256',$_POST['pass']));
   break;
   case "o":
-    $ordrin->user->authenticate($_POST['email'],$_POST['pass']);
+    $ordrin->user->authenticate($_POST['email'],hash('sha256',$_POST['pass']));
     
     $addr = $ordrin::address($_POST["addr"], $_POST["city"], $_POST["state"], $_POST["zip"], "");
     $print = $ordrin->order->submit($_POST["rid"], $_POST["tray"], $dt, $_POST["email"], $_POST["fName"], $_POST["lName"], $a, $_POST["fName"] . " " . $_POST["lName"], $_POST["cardNum"], $_POST["csc"], $_POST["expMo"] + $_POST["expYr"], $a);
@@ -63,11 +63,11 @@ switch ($_POST["func"]) {
     echo json_encode($print);
   break;
   case "macc":
-    $print = $u->makeAcct($_POST["email"], $_POST["pass"], $_POST["fName"], $_POST["lName"]);
+    $print = $u->makeAcct($_POST["email"], hash('sha256',$_POST["pass"]), $_POST["fName"], $_POST["lName"]);
     echo json_encode($print);
   break;
   case "upass":
-    $print = $ordrin->user->updatePassword($_POST['pass']);
+    $print = $ordrin->user->updatePassword(hash('sha256',$_POST['pass']));
     echo json_encode($print);
   break;
   case "gaddr":
@@ -97,11 +97,11 @@ switch ($_POST["func"]) {
     echo json_encode($print);
   break;
   case "gordr":
-    $print = $ordrin->user->getOrderHistory($_POST["ordrID"]);
+    $print = $ordrin->user->getOrderHistory();
     echo json_encode($print);
   break;
   case "gordrs":
-    $print = $ordrin->user->getOrderHistory();
+    $print = $ordrin->user->getOrderHistory($_POST["ordrID"]);
     echo json_encode($print);
   break;
 }
