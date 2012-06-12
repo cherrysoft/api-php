@@ -31,7 +31,7 @@ class OrdrinApi {
      * @param string    $user_url         Custom user URL to use
      * @param string    $order_url        Customer order URL to use
      */
-    function __construct($key, $servers) {
+    function __construct($key, $servers, $restaurant_url = null, $user_url = null, $order_url = null) {
         $this->_key = $key;
 
         if(!isset($servers)){
@@ -40,7 +40,13 @@ class OrdrinApi {
 
         switch($servers) {
           case self::CUSTOM_SERVERS:
-            //TODO: Throw error if no urls set
+            if(empty($restaurant_url) || empty($user_url) || empty($order_url)) {
+              //TODO: Throw error if no urls set
+            }
+            
+            $this->restaurant_url = $restaurant_url;
+            $this->user_url = $user_url;
+            $this->order_url = $order_url;
             break;
           case self::PROD_SERVERS:
             $this->restaurant_url = "https://r.ordr.in";
@@ -61,7 +67,7 @@ class OrdrinApi {
 
 
     /**
-     * Get the configuration information the wrapper using (for debug purposes).
+     * Get the configuration information the wrapper's using (for debug purposes).
      *
      * @return Array  An array containing the API Key, Restaurant URL, User URL and Order URL the wrapper is using.
      */
@@ -153,19 +159,19 @@ class OrdrinApi {
     }
 
     /* Data Structure Helpers */
-    public function address($addr, $city, $state, $zip, $phone, $addr2 = null) {
+    static public function address($addr, $city, $state, $zip, $phone, $addr2 = null) {
       return new Address($addr, $city, $state, $zip, $phone, $addr2);
     }
 
-    public function creditCard($name, $expMonth, $expYear, $address, $number, $cvc) {
+    static public function creditCard($name, $expMonth, $expYear, $address, $number, $cvc) {
       return new CreditCard($name, $expMonth, $expYear, $address, $number, $cvc);
     }
 
-    public function trayItem($itemId, $quantity, $options = null) {
+    static public function trayItem($itemId, $quantity, $options = null) {
       return new TrayItem($itemId, $quantity, $options);
     }
 
-    public function tray($items = null) {
+    static public function tray($items = null) {
       return new Tray($items);
     }
 }

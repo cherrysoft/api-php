@@ -8,15 +8,13 @@ Data Structures
 ---------------
 
 ```php
-$ordrin->Address(address, city, state, zip, phone, address2);
+$ordrin::Address(address, city, state, zip, phone, address2);
 
-$ordrin->creditCard(name, expiration_month, expiration_year, number, cvc, address)
+$ordrin::creditCard(name, expiration_month, expiration_year, number, cvc, address)
 
-ordrin.data.UserLogin(email, password)
+$ordrin::trayItem(item_id, quantity, *options)
 
-$ordrin->trayItem(item_id, quantity, *options)
-
-$ordrin->tray(*items)
+$ordrin::tray(*items)
 ```
 
 Exceptions
