@@ -1,4 +1,4 @@
-Ordr.in PHP API v2.0
+Ordr.in PHP API v0.1.0
 ==================
 
 A PHP wrapper for the Restaurant, User, and Order APIs provided by Ordr.in. The main API documentation can be found at http://ordr.in/developers.
@@ -48,7 +48,7 @@ OrdrinExceptionBadValue(msg)
 API Initialization
 ------------------
 
-There are two key ways to initialize the OrdrinApi. First you can initialize it using the standard test or demo servers like so.
+There are two key ways to initialize the OrdrinApi. First, you can initialize it using the standard test or demo servers:
 ```php
 // initialize with ordr.in test servers
 $ordrin = new OrdrinApi(API_KEY, OrdrinApi::TEST_SERVERS);
