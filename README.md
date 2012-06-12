@@ -42,7 +42,7 @@ OrdrinExceptionApiError(msg)
 OrdrinExceptionApiInvalidResponse(msg)
 
 // Exception thrown when data passed is invalid
-OrdrInExceptionBadValue(msg)
+OrdrinExceptionBadValue(msg)
 ```
 
 API Initialization
