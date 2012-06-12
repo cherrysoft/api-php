@@ -19,7 +19,8 @@ class OrdrinApi {
     private $_key, $_server; 
 
     protected $userAgent = "ordrin-php/2.0";
-    protected $restaurant_url, $user_url, $order_url, $_email, $_password;
+    protected $restaurant_url, $user_url, $order_url; 
+    static protected $_email, $_password;
     
 
     /**
@@ -94,15 +95,15 @@ class OrdrinApi {
         $uri .= "/".rawurlencode($param);
       }
       $request_url = $this->base_url.$uri;
-      rtrim($request_url,"//");
 
+var_dump($request_url);
       $headers = array();
       if($this->_key) {
         $headers[] = 'X-NAAMA-CLIENT-AUTHENTICATION: id="'.$this->_key.'", version="1"';
       }
 
       if($login) {
-        $headers[] = 'X-NAAMA-AUTHENTICATION: username="' . $this->_email . '", response="' . hash('sha256', $this->_password . $this->_email . $uri) . '", version="1"';
+        $headers[] = 'X-NAAMA-AUTHENTICATION: username="' . self::$_email . '", response="' . hash('sha256', self::$_password . self::$_email . $uri) . '", version="1"';
       }
 
       $headers[] = 'Content-Type: application/x-www-form-urlencoded';
@@ -122,6 +123,7 @@ class OrdrinApi {
 
       if ($method == 'POST') {
         $post_fields='';
+var_dump($data);
         if(isset($data)){
           $post_fields  = http_build_query($data);
           curl_setopt($ch,CURLOPT_POST,true);
@@ -157,6 +159,11 @@ class OrdrinApi {
       curl_close($ch);
 
       return json_decode($respBody);
+    }
+
+    public function authenticate($email, $password) {
+      self::$_email = $email;
+      self::$_password = $password;
     }
 
     /* formatting helpers */

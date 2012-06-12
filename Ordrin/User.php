@@ -5,12 +5,6 @@ class User extends OrdrinApi {
       $this->base_url = $base_url;
     }
 
-    public function authenticate($email, $password) {
-      $this->_email = $email;
-      $this->_password = $password;
-    }
-
-    
     function create($email, $password, $fName, $lName) {
         return $this->_call_api('POST',
                                 array(
@@ -30,10 +24,10 @@ class User extends OrdrinApi {
         return $this->_call_api('GET',
                                array(
                                  'u',
-                                 $this->_email
+                                 self::$_email
                              ),
                              array(
-                                'password' => $this->_password
+                                'password' => self::$_password
                              ),
                              true
                         );
@@ -44,7 +38,7 @@ class User extends OrdrinApi {
             return $this->_call_api('GET',
                                     array(
                                       'u',
-                                     $this->_email,
+                                     self::$_email,
                                      'addrs',
                                      $addrNick,
                                     ),
@@ -55,7 +49,7 @@ class User extends OrdrinApi {
             return $this->_call_api('GET',
                                    array(
                                        'u',
-                                      $this->_email,
+                                  self::$_email,
                                       'addrs',
                                  ),
                                  null,
@@ -71,7 +65,7 @@ class User extends OrdrinApi {
         return $this->_call_api('PUT',
                                array(
                                 'u',
-                                $this->_email,
+                                self::$_email,
                                 'addrs',
                                 $nick
                              ),
@@ -91,7 +85,7 @@ class User extends OrdrinApi {
         return $this->_call_api('DELETE',
                                array(
                                     'u',
-                                    $this->_email,
+                                    self::$_email,
                                     'addrs',
                                     $addrNick
                               ),
@@ -105,7 +99,7 @@ class User extends OrdrinApi {
             return $this->_call_api('GET',
                                     array(
                                       'u',
-                                      $this->_email,
+                                      self::$_email,
                                       "ccs",
                                       $cardNick
                                  ),
@@ -116,7 +110,7 @@ class User extends OrdrinApi {
             return $this->_call_api('GET',
                                    array(
                                      'u',
-                                     $this->_email,
+                                     self::$_email,
                                      'ccs'
                                   ),
                                  null,
@@ -131,7 +125,7 @@ class User extends OrdrinApi {
         return $this->_call_api('PUT',
                                array(
                                  'u',
-                                 $this->_email,
+                                 self::$_email,
                                  'ccs',
                                  $cardNick,
                              ),
@@ -155,7 +149,7 @@ class User extends OrdrinApi {
         return $this->_call_api('DELETE',
                                 array(
                                   'u',
-                                  $this->_email,
+                                  self::$_email,
                                   'ccs',
                                   $cardNick
                                 ),
@@ -167,7 +161,7 @@ class User extends OrdrinApi {
     function getOrderHistory($orderID='') {
         if (!empty($orderID)) return $this->_call_api('GET',
                                                        array('u',
-                                                       $this->_email,
+                                                       self::$_email,
                                                        'order',
                                                        $orderID
                                                    ),
@@ -177,7 +171,7 @@ class User extends OrdrinApi {
         else return $this->_call_api('GET',
                                      array(
                                         'u',
-                                        $this->_email,
+                                        self::$_email,
                                         'orders'
                                     ),
                                     null,
@@ -189,7 +183,7 @@ class User extends OrdrinApi {
         return $this->_call_api('PUT',
                                 array(
                                  'u',
-                                 $this->_email,
+                                 self::$_email,
                                  'password'
                                 ),
                                 array(
