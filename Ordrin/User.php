@@ -12,7 +12,7 @@ class User extends OrdrinApi {
                                  $email
                                 ),
                                 array(
-                                 'password' => $password,
+                                 'pw' => $password,
                                  'first_name' => $fName,
                                  'last_name' => $lName
                              )
