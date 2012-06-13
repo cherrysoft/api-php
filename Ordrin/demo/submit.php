@@ -2,20 +2,7 @@
 
 require_once('../OrdrinApi.php');
 
-/*
-no DateTime:createFromFormat in older PHP versions
-
-pif ($_POST["dT"] == 'ASAP') {
-  $dt = new dT();
-  $dt->asap();
-} else {
-  $dt = new dT(DateTime::createFromFormat('mdY', $_POST["dT"]));
-}
-*/
-
-/*$dt = new dT("");
-$dt->asap();*/
-$dt = 'ASAP';
+$dt = $_POST['dT'];
 
 $ordrin = new OrdrinApi('HDpXJTdP4RGsKtNku8bTaA', OrdrinApi::TEST_SERVERS);
 
