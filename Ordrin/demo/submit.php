@@ -88,10 +88,11 @@ switch ($_POST["func"]) {
     echo json_encode($print);
   break;
   case "macc":
-    $print = $u->makeAcct($_POST["email"], hash('sha256',$_POST["pass"]), $_POST["fName"], $_POST["lName"]);
+    $print = $ordrin->user->create($_POST["email"], hash('sha256',$_POST["pass"]), $_POST["fName"], $_POST["lName"]);
     echo json_encode($print);
   break;
   case "upass":
+    $ordrin->user->authenticate($_POST['email'],hash('sha256',$_POST['oldPass']));
     $print = $ordrin->user->updatePassword(hash('sha256',$_POST['pass']));
     echo json_encode($print);
   break;
