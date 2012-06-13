@@ -4,7 +4,7 @@ require_once('../OrdrinApi.php');
 
 $dt = (isset($_POST['dT'])) ? $_POST['dT'] : '';
 
-$ordrin = new OrdrinApi('HDpXJTdP4RGsKtNku8bTaA', OrdrinApi::TEST_SERVERS);
+$ordrin = new OrdrinApi(%insert_your_api_key_here%, OrdrinApi::TEST_SERVERS);
 
 switch ($_GET["api"]) {
   case "r":

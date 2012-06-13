@@ -15,7 +15,7 @@ require 'Ordrin/OrdrinApi.php'
 
 Demo
 -------------------
-Included with the library is a basic demo page to help you see how interaction with the Ordr.in API works. Access the demo by browsing to Ordrin/demo.
+Included with the library is a basic demo page to help you see how interaction with the Ordr.in API works. To run the demo you'll need to [signup for an API key](http://ordr.in/developers/signup) and add it to the API initalization in  Ordrin/demo//submit.php. Access the demo by browsing to Ordrin/demo. When using the wrapper in production you should remove the demo folder.
 
 Data Structures
 ---------------
