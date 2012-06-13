@@ -16,10 +16,8 @@ class OrdrinApi {
     const TEST_SERVERS = 0;
     const PROD_SERVERS = 1; 
 
-    private $_key, $_server; 
-
     protected $userAgent = "ordrin-php/2.0";
-    protected $restaurant_url, $user_url, $order_url; 
+    protected $restaurant_url, $user_url, $order_url, $_key, $_server; 
     static protected $_email, $_password;
     
 
@@ -34,10 +32,6 @@ class OrdrinApi {
      */
     function __construct($key, $servers, $restaurant_url = null, $user_url = null, $order_url = null) {
         $this->_key = $key;
-
-        if(!isset($servers)){
-          //TODO: Throw exception
-        }
 
         switch($servers) {
           case self::CUSTOM_SERVERS:
@@ -91,6 +85,7 @@ class OrdrinApi {
      */
     protected function _call_api($method, $params, $data=null, $login=null) {
       $uri = '';
+      $cleanuri = '';
       foreach($params as $param) {
         $uri .= "/".rawurlencode($param);
       }
@@ -154,9 +149,18 @@ class OrdrinApi {
         $respInfo = curl_getinfo($ch);
       }
 
+      if($respInfo['http_code'] > 400) {
+        throw new OrdrinExceptionApiInvalidResponse(array("API returned an HTTP status of ".$respInfo['http_code']));
+      }
+
       curl_close($ch);
 
-      return json_decode($respBody);
+      $json = json_decode($respBody);
+      if(isset($json->_error) && $json->_error == 1) {
+        throw new OrdrinExceptionApiError(array("API error: ".$json->msg.'. '.$json->text));
+      }
+
+      return $json;
     }
 
     public function authenticate($email, $password) {
@@ -205,5 +209,48 @@ class OrdrinApi {
 
     static public function tray($items = null) {
       return new Tray($items);
+    }
+}
+
+// Exceptions
+Class OrdrinException extends Exception {
+      public function __construct($aMessages, $code = 0, Exception $previous = null) {
+        $message = implode(", ", $aMessages);
+        parent::__construct($message, $code, $previous);
+    }
+
+    // custom string representation of object
+    public function __toString() {
+        return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
+    }
+}
+
+Class OrdrinExceptionBadValue extends OrdrinException {
+      public function __construct($aMessages, $code = 0, Exception $previous = null) {
+        parent::__construct($aMessages, $code, $previous);
+    }
+
+    public function __toString() {
+        return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
+    }
+}
+
+Class OrdrinExceptionApiError extends OrdrinException {
+      public function __construct($aMessages, $code = 0, Exception $previous = null) {
+        parent::__construct($aMessages, $code, $previous);
+    }
+
+    public function __toString() {
+        return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
+    }
+} 
+
+Class OrdrinExceptionApiInvalidResponse extends OrdrinException {
+      public function __construct($aMessages, $code = 0, Exception $previous = null) {
+        parent::__construct($aMessages, $code, $previous);
+    }
+
+    public function __toString() {
+        return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
     }
 }
