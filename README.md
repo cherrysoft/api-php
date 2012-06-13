@@ -10,12 +10,12 @@ You can install the Ordrin PHP API library by [downloading the source (.zip)](ht
 After you download the library, move the Ordrin folder to your project and include the OrdrinApi file:
 
 ```php
-require 'Ordrin/OrdrinApi.php'
+require 'Ordrin/OrdrinApi.php';
 ````
 
 Demo
 -------------------
-Included with the library is a basic demo page to help you see how interaction with the Ordr.in API works. To run the demo you'll need to [signup for an API key](http://ordr.in/developers/signup) and add it to the API initalization in  Ordrin/demo//submit.php. Access the demo by browsing to Ordrin/demo. When using the wrapper in production you should remove the demo folder.
+Included with the library is a basic demo page to help you see how interaction with the Ordr.in API works. To run the demo you'll need to [sign up for an API key](http://ordr.in/developers/signup) and add it to the API initalization in  Ordrin/demo//submit.php. Access the demo by browsing to Ordrin/demo. When using the wrapper in production you should remove the demo folder.
 
 Data Structures
 ---------------
@@ -23,26 +23,26 @@ Data Structures
 ```php
 $ordrin::address(address, city, state, zip, phone, address2);
 
-$ordrin::creditCard(name, expiration_month, expiration_year, number, cvc, address)
+$ordrin::creditCard(name, expiration_month, expiration_year, number, cvc, address);
 
-$ordrin::trayItem(item_id, quantity, *options)
+$ordrin::trayItem(item_id, quantity, *options);
 
-$ordrin::tray(*items)
+$ordrin::tray(*items);
 ```
 
 Exceptions
 ----------
-The library will throw exceptions on 3 diferent types of errors: API error, API invalid response and bad value. You'll want ot be sure to catch these exceptions if you want to fail gracefully.
+The library will throw exceptions on 3 diferent types of errors: API error, API invalid response and bad value. You'll want to be sure to catch these exceptions if you want to fail gracefully.
 
 ```php
 // Exception thrown when OrdrinApi returns erorr data in json
-OrdrinExceptionApiError(msg)
+OrdrinExceptionApiError(msg);
 
 // Exception thrown when OrdrinAPI returns an invalid HTTP response
-OrdrinExceptionApiInvalidResponse(msg)
+OrdrinExceptionApiInvalidResponse(msg);
 
 // Exception thrown when data passed is invalid
-OrdrinExceptionBadValue(msg)
+OrdrinExceptionBadValue(msg);
 ```
 
 API Initialization
@@ -77,7 +77,7 @@ $ordrin->restaurant->deliveryCheck(restaurant_id, date_time, address);
 $ordrin->restaurant->deliveryFee(restaurant_id, subtotal, tip, date_time, address);
 
 // Provides restaurant details to allow display of a restaurant's menu page
-$ordrin->restaurant->details(restaurant_id)
+$ordrin->restaurant->details(restaurant_id);
 ```
 
 User API Functions
@@ -92,7 +92,7 @@ $ordrin->user->authenticate(email, sha256encodedpw);
 $ordrin->user->getAccountInfo();
 
 // Create New Account
-$ordrin->user->create(email, sha256encodedpw, first_name, last_name)
+$ordrin->user->create(email, sha256encodedpw, first_name, last_name);
 
 // Get all saved addresses
 $ordrin->user->getAddress();
@@ -134,13 +134,13 @@ You can use the following methods to interact with the Ordr.in Order API
 
 ```php
 // submit an anonymous order
-$ordrin->order->submit(restaurant_id, tray, tip, delivery_date_time, email, '', first_name, last_name, address, credit_card)
+$ordrin->order->submit(restaurant_id, tray, tip, delivery_date_time, email, '', first_name, last_name, address, credit_card);
 
 // submit an order and create an account
-$ordrin->order->submit(restaurant_id, tray, tip, delivery_date_time, email, password, first_name, last_name, address, credit_card)
+$ordrin->order->submit(restaurant_id, tray, tip, delivery_date_time, email, password, first_name, last_name, address, credit_card);
 
 // submit an order for an authenticated user
-$ordrin->order->submit(restaurant_id, tray, tip, delivery_date_time, '', '', first_name, last_name, address, credit_card, true)
+$ordrin->order->submit(restaurant_id, tray, tip, delivery_date_time, '', '', first_name, last_name, address, credit_card, true);
 ```
 
 Prerequisites
