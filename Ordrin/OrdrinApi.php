@@ -110,43 +110,42 @@ class OrdrinApi {
 
       curl_setopt($ch, CURLOPT_VERBOSE, 1);
 
-      if ($method == 'GET') {
-        $respBody = curl_exec($ch);
-        $respInfo = curl_getinfo($ch);
-      }
+      switch($method) {
+        case 'GET':
+          $respBody = curl_exec($ch);
+          $respInfo = curl_getinfo($ch);
+          break;
+        case 'POST':
+          $post_fields='';
+          if(isset($data)){
+            $post_fields  = http_build_query($data);
+            curl_setopt($ch,CURLOPT_POST,true);
+            curl_setopt($ch,CURLOPT_POSTFIELDS,$post_fields);
+          }
 
-      if ($method == 'POST') {
-        $post_fields='';
-        if(isset($data)){
-          $post_fields  = http_build_query($data);
-          curl_setopt($ch,CURLOPT_POST,true);
-          curl_setopt($ch,CURLOPT_POSTFIELDS,$post_fields);
-        }
+          $respBody = curl_exec($ch);
+          $respInfo = curl_getinfo($ch);
+          break;
+        case 'PUT':
+          $put_fields = http_build_query($data);
+          $reqLen = strlen($put_fields);
+          $fh = fopen('php://memory', 'rw');
+          fwrite($fh, $put_fields);
+          rewind($fh);
 
-        $respBody = curl_exec($ch);
-        $respInfo = curl_getinfo($ch);
-      }
+          curl_setopt($ch, CURLOPT_INFILE, $fh);
+          curl_setopt($ch, CURLOPT_INFILESIZE, $reqLen);
+          curl_setopt($ch, CURLOPT_PUT, true);
 
-      if($method == 'PUT') {
-        $put_fields = http_build_query($data);
-        $reqLen = strlen($put_fields);
-        $fh = fopen('php://memory', 'rw');
-        fwrite($fh, $put_fields);
-        rewind($fh);
+          $respBody = curl_exec($ch);
+          $respInfo = curl_getinfo($ch);
+          break;
+        case 'DELETE':
+          curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
 
-        curl_setopt($ch, CURLOPT_INFILE, $fh);
-        curl_setopt($ch, CURLOPT_INFILESIZE, $reqLen);
-        curl_setopt($ch, CURLOPT_PUT, true);
-
-        $respBody = curl_exec($ch);
-        $respInfo = curl_getinfo($ch);
-      }
-
-      if($method == 'DELETE') {
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
-
-        $respBody = curl_exec($ch);
-        $respInfo = curl_getinfo($ch);
+          $respBody = curl_exec($ch);
+          $respInfo = curl_getinfo($ch);
+          break;
       }
 
       if($respInfo['http_code'] > 400) {
@@ -157,7 +156,11 @@ class OrdrinApi {
 
       $json = json_decode($respBody);
       if(isset($json->_error) && $json->_error == 1) {
-        throw new OrdrinExceptionApiError(array("API error: ".$json->msg.'. '.$json->text));
+        $string = $json->msg;
+        if(isset($json->text)) {
+          $string .= ' - '.$json->text;
+        }
+        throw new OrdrinExceptionApiError(array("API error: ".$string));
       }
 
       return $json;
