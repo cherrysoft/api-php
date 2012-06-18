@@ -63,7 +63,7 @@ class Order extends OrdrinApi {
         if(!$useAuth) {
           $params['em'] = $email;
           if(!empty($password)) {
-            $params['password'] = $password;
+            $params['pw'] = $password;
           }
         }
 
