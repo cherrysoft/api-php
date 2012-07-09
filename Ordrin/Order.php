@@ -31,9 +31,42 @@ class Order extends OrdrinApi {
           $date = $this->format_date($date_time);
           $time = $this->format_time($date_time);
         }
-
-        $addr->validate();
-        $credit_card->address->validate();
+        
+        $_errors = array();
+        
+        if(!preg_match('/^\d+$/',$rID)) {
+          $_errors[] = 'Order Submit - Validation - Restaurant ID (invalid, must be integer) (' . $rID . ')';
+        }
+        
+        if(!preg_match("/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i", $email)) {
+          $_errors[] = 'Order Submit - Validation - Email (invalid) (' . $email . ')';
+        }
+        
+        if(!preg_match('/^\$?\d*(\.\d{2})?$/', $tip) || $tip == '') {
+          $_errors[] = 'Order Submit - Validation - Tip (invalid) (' . $tip . ')';
+        }
+        
+        try {
+          $tray->validate();
+        } catch (OrdrinExceptionBadValue $ex) {
+          $_errors[] = $ex.__toString();
+        }
+        
+        try {
+          $addr->validate();
+        } catch (OrdrinExceptionBadValue $ex) {
+          $_errors[] = $ex.__toString();
+        }
+        
+        try {
+          $credit_card->validate();
+        } catch (OrdrinExceptionBadValue $ex) {
+          $_errors[] = $ex.__toString();
+        }
+        
+        if(!empty($_errors)) {
+          throw new OrdrinExceptionBadValue($_errors);
+        }
 
         $params =  array(
                                 'restaurant_id' => $rID,
