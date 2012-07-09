@@ -13,6 +13,7 @@ class Tray {
       if(!$item instanceof TrayItem) {
         throw new OrdrinExceptionBadValue(array('Tray - Validation - Items (invalid, items must be a non-empty array of TrayItems or string tray representation)'));
       }
+      array_push($this->items, $item);
     }
     
     function validate() {
