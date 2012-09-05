@@ -94,6 +94,7 @@ class Validation {
 		return true;
 	}
 	public function validateCardNumber($number) {
+		//Perform a Luhn Test
 		$number1 = substr($numebr, 0, strlen($number) - 1);
 		$sum = 0;
 		for($i = 0; $i < strlen($number1); $i++) {

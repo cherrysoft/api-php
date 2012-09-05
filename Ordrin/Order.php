@@ -32,20 +32,12 @@ class Order extends OrdrinApi {
           $time = $this->format_time($date_time);
         }
         
-        $_errors = array();
-        
-        if(!preg_match('/^\d+$/',$rID)) {
-          $_errors[] = 'Order Submit - Validation - Restaurant ID (invalid, must be integer) (' . $rID . ')';
-        }
-        
-        if(!preg_match("/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i", $email)) {
-          $_errors[] = 'Order Submit - Validation - Email (invalid) (' . $email . ')';
-        }
-        
-        if(!preg_match('/^\$?\d*(\.\d{2})?$/', $tip) || $tip == '') {
-          $_errors[] = 'Order Submit - Validation - Tip (invalid) (' . $tip . ')';
-        }
-        
+        $validation = new Validation();
+        $validation -> validateRestaurantID($rID);
+        $validation -> validateEmail($email);
+        $validation -> validateMoney($tip);
+    	$_errors = $validation -> errors;
+                
         try {
           $tray->validate();
         } catch (OrdrinExceptionBadValue $ex) {

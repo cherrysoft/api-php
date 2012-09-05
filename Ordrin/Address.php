@@ -14,8 +14,6 @@ class Address {
     }
 
     function validate($element = "all") {
-    	
-    	$_errors = array();
     	$validation = new Validation();
      	//do ALL validation
       	$validation -> validateZipCode($this->zip);
