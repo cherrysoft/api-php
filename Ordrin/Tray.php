@@ -18,7 +18,6 @@ class Tray {
     
     function validate() {
       $_errors = array();
-      
       if(is_array($this->items) && !empty($this->items) && $this->items[0] instanceof TrayItem) {
         foreach($this->items as $item) {
           try {
@@ -28,11 +27,10 @@ class Tray {
           }
         }
       }
-      elseif(is_string($this->items) && !preg_match('/^\d+(,\d+)*(\+\d+(,\d+)*)*/$', $this->items)) {
-        $_errors[] = 'Tray - Validation - Items (invalid, items must be a non-empty array of TrayItems or string tray representation) (' . $this->items . ')';
-      }
-      else {
-        $_errors[] = 'Tray - Validation - Items (invalid, items must be a non-empty array of TrayItems or string tray representation)';
+      else{
+      	$validation = new Validation();
+      	$validation -> validateTrayItems($this->items);
+      	if(!empty($validation->errors)) $_errors[] = $validation->errors[0];
       }
       
       if(!empty($_errors)) {

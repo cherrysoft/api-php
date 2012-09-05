@@ -39,7 +39,14 @@ class Validation {
 	}
 	public function validateMoney ($value){
 		if(!preg_match('/^\$?\d*(\.\d{2})?$/', $value) || $value == ''){
-			$this->errors[] = 'Validation - Money (invalid)';
+			$this->errors[] = 'Validation - Money (invalid) (' . $value . ')';
+			return false;
+		}
+		return true;	
+	}
+	public function validateTrayItems ($value){
+		if(!preg_match('/^\d+(,\d+)*(\+\d+(,\d+)*)*/$', $value) || $value == ''){
+			$this->errors[] = 'Tray - Validation - Items (invalid, items must be a non-empty array of TrayItems or string tray representation) (' . $value . ')';
 			return false;
 		}
 		return true;	
