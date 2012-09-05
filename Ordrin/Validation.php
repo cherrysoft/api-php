@@ -2,12 +2,35 @@
 
 class Validation {
 	public $errors = array();
-	public function validateRequiredField ($value,$name){
-		if(empty($value)){
-			$this->errors[] = 'Validation - Required (' . $name . ')';
-			return false;
+	public function validate($field,$value,$required = true){
+		$mapFunctions=array(
+			'email' => 'validateEmail',		
+			'restaurantID' => 'validateInteger',		
+			'itemID' => 'validateInteger',		
+			'quantity' => 'validateInteger',		
+			'money' => 'validateMoney',		
+			'trayItems' => 'validateTrayItems',		
+			'zipCode' => 'validateZipCode',		
+			'telephone' => 'validatePhone',		
+			'city' => 'validateCity',		
+			'state' => 'validateState',		
+			'URL' => 'validateURL',		
+			'CVC' => 'validateCVC',		
+			'expirationDate' => 'validateExpirationDate',		
+			'cardNumber' => 'validateCardNumber');
+		if(!$required && empty($value)){
+			return true;
 		}
-		return true;
+		else if($mapFunctions[$field] && method_exists(__CLASS__,$mapFunctions[$field])){
+				return $this->$mapFunctions[$field]($value);
+			}
+		else{
+			//No validation function. Check if is empty.
+			if(empty($value)){
+				$this->errors[] = 'Validation - Required (' . $field . ')';
+				return false;
+			}
+		}
 	}
 	public function validateInteger ($value,$name){
 		if(!preg_match('/^\d+$/', $value) || $value == ''){
@@ -15,27 +38,6 @@ class Validation {
 			return false;
 		}
 		return true;	
-	}
-	public function validateRestaurantID ($value){
-		if(!preg_match('/^\d+$/', $value) || $value == ''){
-			$this->errors[] = 'Validation - Restaurant ID (invalid, must be integer) (' . $value . ')';
-			return false;
-		}
-		return true;	
-	}
-	public function validateItemID ($value){
-		if(!preg_match('/^\d+$/', $value) || $value == ''){
-			$this->errors[] = 'Validation - Item ID (invalid, must be integer) (' . $value . ')';
-			return false;
-		}
-		return true;
-	}
-	public function validateQuantity ($value){
-		if(!preg_match('/^\d+$/', $value) || $value == ''){
-			$this->errors[] = 'Validation - Quantity (invalid, must be integer) (' . $value . ')';
-			return false;
-		}
-		return true;
 	}
 	public function validateMoney ($value){
 		if(!preg_match('/^\$?\d*(\.\d{2})?$/', $value) || $value == ''){
