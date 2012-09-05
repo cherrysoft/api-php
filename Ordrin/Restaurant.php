@@ -42,12 +42,9 @@ class Restaurant extends OrdrinApi {
      * @return object An object containing information about the restaurant and if delivery is availble
      */
     function deliveryCheck($rID, $date_time, $addr) {
-        $_errors = array();
-    
-        if (!preg_match('/^\d+/$', $rID)) {
-            $_errors = "Restaurant DeliveryCheck - Validation - restaurant ID (invalid, must be integer) (" . $rID . ")";
-        }
-        
+    	$validation = new Validation();
+    	$validation -> validateRestaurantID($rID);
+        $_errors = $validation -> errors;
         try {
           $addr->validate();
         } catch (OrdrinExceptionBadValue $ex) {
@@ -83,22 +80,11 @@ class Restaurant extends OrdrinApi {
      */
     function deliveryFee($rID, $subtotal, $tip, $date_time, $addr) {
         $_errors = array();
-        
-        if (!preg_match('/^\d+/$', $rID)) {
-            $_errors[] = "Restaurant DeliveryFee - Validation - Restaurant ID (invalid, must be integer) (" . $rID . ")";
-        }
-        
-        if(!preg_match('/^\d*(\.\d{2})?$/', $subtotal) && $subtotal != '') {
-          $_errors[] = "Restaurant DeliveryFee - Validation - Subtotal (invalid, must be numeric) (" . $subtotal . ")";
-        }
-        
-        if(empty($tip)) {
-          $tip = 0;
-        }
-        elseif(!preg_match('/^\d*\.\d{2}$/', $tip) && $tip != '') {
-          $_errors[] = "Restaurant DeliveryFee - Validation - Tip (invalid, must be numeric) (" . $tip . ")";
-        }
-        
+        $validation = new Validation();
+        $validation->validateRestaurantID($rID);
+        $validation->validateMoney($subtotal);
+    	(empty($tip)) ? $tip = 0 :  $validation->validateMoney($tip);
+        $_errors = $validation -> errors;
         try {
           $addr->validate();
         } catch (OrdrinExceptionBadValue $ex) {
@@ -108,9 +94,7 @@ class Restaurant extends OrdrinApi {
         if(!empty($_errors)) {
           throw new OrdrinExceptionBadValue($_errors);
         }
-        
         $dt = $this->format_datetime($date_time);
-
         return $this->_call_api("GET",
                                array(
                                   "fee",
@@ -133,11 +117,11 @@ class Restaurant extends OrdrinApi {
      * @return object An object containing basic & menu information for restaurant
      */
     function details($rID) {
-        if (!preg_match('/^\d+$/', $rID)) {
-            $_errors[] = "Restaurant Details - Validation - restaurant ID (invalid, must be integer) (" . $rID . ")";
-            throw new OrdrinExceptionBadvalue($_errors);
-        }
-
+    	$validation = new Validation();
+    	$validation -> validateRestaurantID($rID);
+    	if(!empty($validation->errors)){
+    		throw new OrdrinExceptionBadvalue($validation->errors);
+    	}
         return $this->_call_api("GET",
                                array("rd",$rID)
                         );
