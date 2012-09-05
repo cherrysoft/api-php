@@ -8,25 +8,14 @@ class User extends OrdrinApi {
     }
 
     function create($email, $password, $fName, $lName) {
-        $_errors = array();
-    
-        if(!preg_match("/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i", $email)) {
-          $_errors[] = 'User Create - Validation - Email (invalid) (' . $email . ')';
-        }
         
-        if(empty($password)) {
-          $_errors[] = 'User Create - Validation - Password (invalid, must provide a password)';
-        }
-        
-        if(empty($fName)) {
-          $_errors[] = 'User Create - Validation - First Name (invalid, must provide a first name)';
-        }
-        
-        if(empty($fName)) {
-          $_errors[] = 'User Create - Validation - Last Name (invalid, must provide a last name)';
-        }
-        
-        if(!empty($_errors)) {
+    	$_errors = array();
+    	$validation = new Validation();
+    	$validation -> validateEmail($email);
+    	$validation -> validateRequiredField($password, 'password');
+    	$validation -> validateRequiredField($fName, 'First Name');
+    	$validation -> validateRequiredField($lName, 'Last Name');
+        if(!empty($validation -> errors)) {
           throw new OrdrinExceptionBadValue($_errors);
         }
         
@@ -143,20 +132,11 @@ class User extends OrdrinApi {
     }
 
     function setCard($cardNick, $name, $number, $cvc, $expiryMonth, $expiryYear, $addr) {
-        $_errors = array();
-    
-        if (!preg_match('/^\d{2}\/\d{4}$/', $expiryMonth . '/' . $expiryYear)) {
-          $_errors[] = 'User SetCard - Validation - Expiration Date (invalid, must be in format mm/yyyy) (' . $expiryMonth . '/' . $expiryYear . ')';
-        }
-        
-        if(!preg_match('/^\d{3,4}$/', $cvc)) {
-          $_errors[] = 'User SetCard- Validation - CVC (invalid) (' . $this->cvc . ')';
-        }
-        
-        if (!CreditCard::LuhnTest($number)) {
-          $_errors[] = 'User SetCard - Validation - Number (invalid) (' . $this->number . ')';
-        }
-        
+        $validation = new Validation();
+        $validation -> validateExpirationDate($expiryMonth . '/' . $expiryYear);
+        $validation -> validateCVC($this->cvc);
+        $validation -> validateCardNumber($this->number);
+    	$_errors = $validation->errors;
         try {
           $addr->validate();
         } catch (OrdrinExceptionBadValue $ex) {
@@ -166,9 +146,6 @@ class User extends OrdrinApi {
         if(!empty($_errors)) {
           throw new OrdrinExceptionBadValue($_errors);
         }
-    
-        
-
         return $this->_call_api('PUT',
                                array(
                                  'u',
