@@ -50,9 +50,9 @@ class Restaurant extends OrdrinApi {
         } catch (OrdrinExceptionBadValue $ex) {
           $_errors[] = $ex.__toString();
         }
-        
-        throw new OrdrinExceptionBadValue($_errors);
-        
+        if(!empty($_errors)){
+        	throw new OrdrinExceptionBadValue($_errors);
+        }
         $dt = $this->format_datetime($date_time);
         
         return $this->_call_api("GET",

@@ -2,7 +2,7 @@
 
 class Validation {
 	public $errors = array();
-	public function validate($field,$value,$required = true){
+	public function validate($field,$value,$required = false){
 		$mapFunctions=array(
 			'email' => 'validateEmail',		
 			'restaurantID' => 'validateInteger',		
