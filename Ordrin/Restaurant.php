@@ -1,6 +1,6 @@
 <?php
 
-/* Restuarant API */
+/* Restaurant API */
 class Restaurant extends OrdrinApi {
     function __construct($key,$base_url){
       $this->_key = $key;
