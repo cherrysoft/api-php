@@ -8,6 +8,7 @@ class Validation {
 			'restaurantID' => 'validateInteger',		
 			'itemID' => 'validateInteger',		
 			'quantity' => 'validateInteger',		
+			'option' => 'validateInteger',		
 			'money' => 'validateMoney',		
 			'trayItems' => 'validateTrayItems',		
 			'zipCode' => 'validateZipCode',		
@@ -17,7 +18,8 @@ class Validation {
 			'URL' => 'validateURL',		
 			'CVC' => 'validateCVC',		
 			'expirationDate' => 'validateExpirationDate',		
-			'cardNumber' => 'validateCardNumber');
+			'cardNumber' => 'validateCardNumber'
+			);
 		if(!$required && empty($value)){
 			return true;
 		}
@@ -32,9 +34,9 @@ class Validation {
 			}
 		}
 	}
-	public function validateInteger ($value,$name){
+	public function validateInteger ($value){
 		if(!preg_match('/^\d+$/', $value) || $value == ''){
-			$this->errors[] = 'Validation - '.$name.' (invalid, must be integer) (' . $value . ')';
+			$this->errors[] = 'Validation - (invalid, must be integer) (' . $value . ')';
 			return false;
 		}
 		return true;	
@@ -47,7 +49,7 @@ class Validation {
 		return true;	
 	}
 	public function validateTrayItems ($value){
-		if(!preg_match('/^\d+(,\d+)*(\+\d+(,\d+)*)*/$', $value) || $value == ''){
+		if(!preg_match('/^\d+(,\d+)*(\+\d+(,\d+)*)*/', $value) || $value == ''){
 			$this->errors[] = 'Tray - Validation - Items (invalid, items must be a non-empty array of TrayItems or string tray representation) (' . $value . ')';
 			return false;
 		}
@@ -111,23 +113,12 @@ class Validation {
 	}
 	public function validateCardNumber($number) {
 		//Perform a Luhn Test
-		$number1 = substr($numebr, 0, strlen($number) - 1);
+		$odd = true;
 		$sum = 0;
-		for($i = 0; $i < strlen($number1); $i++) {
-			$sum += intval(substr($number1, $i, $i + 1));
-		}
-	
-		$delta = array(0,1,2,3,4,-4,-3,-2,-1,0);
-		for($i = strlen($number1) - 1; $i >= 0; $i-=2) {
-			$sum += $delta[intval(substr($number1, $i, $i + 1))];
-		}
-	
-		$mod10 = 10 - sum % 10;
-		if($mod10 == 10) {
-			$mod10 = 0;
-		}
-	
-		if ($mod10 == intval(substr($number, strlen($number) - 1, strlen($number)))) {
+		foreach ( array_reverse(str_split($number)) as $num) {
+			$sum += array_sum( str_split(($odd = !$odd) ? $num*2 : $num) );
+			}
+		if (($sum % 10 == 0) && ($sum != 0)){
 			return true;
 		}
 		$this->errors[] = 'Validation - Card Number (' . $number . ')';

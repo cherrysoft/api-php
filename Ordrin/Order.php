@@ -33,9 +33,9 @@ class Order extends OrdrinApi {
         }
         
         $validation = new Validation();
-        $validation -> validateRestaurantID($rID);
-        $validation -> validateEmail($email);
-        $validation -> validateMoney($tip);
+        $validation->validate('restaurantID',$rID);
+        $validation->validate('email',$email);
+        $validation->validate('money',$tip);
     	$_errors = $validation -> errors;
                 
         try {

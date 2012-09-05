@@ -14,12 +14,11 @@ class TrayItem {
 
     function validate($element = "all") {
       $validation = new Validation();
-      $validation -> validateItemID($this->itemId);
-      $validation -> validateQuantity($this->quantity);
-      $validation -> validateItemID($this->itemId);
+      $validation->validate('itemID',$this->itemId);
+      $validation->validate('quantity',$this->quantity);
       if(isset($this->options)) {
       	foreach($this->options as $option) {
-      		$validation -> validateInteger($option, 'Options');
+      		$validation->validate('option', $option);
       	}
       }
       if(!empty($validation->errors)) {

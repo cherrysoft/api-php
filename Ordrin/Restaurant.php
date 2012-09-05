@@ -43,7 +43,7 @@ class Restaurant extends OrdrinApi {
      */
     function deliveryCheck($rID, $date_time, $addr) {
     	$validation = new Validation();
-    	$validation -> validateRestaurantID($rID);
+    	$validation->validate('restaurantID',$rID);
         $_errors = $validation -> errors;
         try {
           $addr->validate();
@@ -81,16 +81,15 @@ class Restaurant extends OrdrinApi {
     function deliveryFee($rID, $subtotal, $tip, $date_time, $addr) {
         $_errors = array();
         $validation = new Validation();
-        $validation->validateRestaurantID($rID);
-        $validation->validateMoney($subtotal);
-    	(empty($tip)) ? $tip = 0 :  $validation->validateMoney($tip);
+    	$validation->validate('restaurantID',$rID);
+    	$validation->validate('money',$subtotal);
+    	(empty($tip)) ? $tip = 0 : $validation->validate('money',$tip);
         $_errors = $validation -> errors;
         try {
           $addr->validate();
         } catch (OrdrinExceptionBadValue $ex) {
           $_errors[] = $ex.__toString();
         }
-        
         if(!empty($_errors)) {
           throw new OrdrinExceptionBadValue($_errors);
         }
@@ -118,7 +117,7 @@ class Restaurant extends OrdrinApi {
      */
     function details($rID) {
     	$validation = new Validation();
-    	$validation -> validateRestaurantID($rID);
+    	$validation->validate('restaurantID',$rID);
     	if(!empty($validation->errors)){
     		throw new OrdrinExceptionBadvalue($validation->errors);
     	}

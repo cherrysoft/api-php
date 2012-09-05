@@ -9,22 +9,20 @@ class Address {
         $this->street2 = $street2;
         $this->state = $state;
         $this->phone = $phone;
-        
         $this->validate();
     }
 
     function validate($element = "all") {
     	$validation = new Validation();
      	//do ALL validation
-      	$validation -> validateZipCode($this->zip);
-      	$validation -> validatePhone($this->phone);
-      	$validation -> validateCity($this->city);
-      	$validation -> validateState($this->state);
+      	$validation->validate('zipCode',$this->zip);
+      	$validation->validate('telephone',$this->phone);
+      	$validation->validate('city',$this->city);
+      	$validation->validate('state',$this->state);
      	if(!empty($validation->errors)) {
      	   throw new OrdrinExceptionBadValue($validation->errors);
       	}
     }
-
 
     function __set($name, $value) {
         $this->$name = $value;

@@ -11,10 +11,10 @@ class User extends OrdrinApi {
         
     	$_errors = array();
     	$validation = new Validation();
-    	$validation -> validateEmail($email);
-    	$validation -> validateRequiredField($password, 'password');
-    	$validation -> validateRequiredField($fName, 'First Name');
-    	$validation -> validateRequiredField($lName, 'Last Name');
+    	$validation->validate('email', $email);
+    	$validation->validate('password', $password);
+    	$validation->validate('First Name', $fName);
+    	$validation->validate('Last Name', $lName);
         if(!empty($validation -> errors)) {
           throw new OrdrinExceptionBadValue($_errors);
         }
@@ -133,9 +133,9 @@ class User extends OrdrinApi {
 
     function setCard($cardNick, $name, $number, $cvc, $expiryMonth, $expiryYear, $addr) {
         $validation = new Validation();
-        $validation -> validateExpirationDate($expiryMonth . '/' . $expiryYear);
-        $validation -> validateCVC($this->cvc);
-        $validation -> validateCardNumber($this->number);
+        $validation->validate('expirationDate',$expiryMonth . '/' . $expiryYear);
+        $validation->validate('CVC',$this->cvc);
+        $validation->validate('cardNumber',$this->number);
     	$_errors = $validation->errors;
         try {
           $addr->validate();

@@ -29,7 +29,7 @@ class Tray {
       }
       else{
       	$validation = new Validation();
-      	$validation -> validateTrayItems($this->items);
+      	$validation->validate('trayItems',$this->items);
       	if(!empty($validation->errors)) $_errors[] = $validation->errors[0];
       }
       

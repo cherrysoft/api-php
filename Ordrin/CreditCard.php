@@ -16,9 +16,9 @@ class CreditCard {
 
     function validate($element = "all") {
     	$validation = new Validation();
-    	$validation->validateExpirationDate($this->expiration);
-    	$validation->validateCVC($this->cvc);
-    	$validation->validateCardNumber($this->$number);
+    	$validation->validate('expirationDate',$this->expiration);
+    	$validation->validate('CVC',$this->cvc);
+    	$validation->validate('cardNumber',$this->$number);
     	$_errors = $validation -> errors;
     	try {
     		$this->address->validate();
