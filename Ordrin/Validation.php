@@ -9,6 +9,13 @@ class Validation {
 		}
 		return true;
 	}
+	public function validateInteger ($value,$name){
+		if(!preg_match('/^\d+$/', $value) || $value == ''){
+			$this->errors[] = 'Validation - '.$name.' (invalid, must be integer) (' . $value . ')';
+			return false;
+		}
+		return true;	
+	}
 	public function validateRestaurantID ($value){
 		if(!preg_match('/^\d+$/', $value) || $value == ''){
 			$this->errors[] = 'Validation - Restaurant ID (invalid, must be integer) (' . $value . ')';
