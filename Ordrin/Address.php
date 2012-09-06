@@ -12,16 +12,17 @@ class Address {
         $this->validate();
     }
 
-    function validate($errors = null) {
-    	if(!$errors) $errors = array();
-    	$validation = new Validation($errors);
+    function validate() {
+    	
+    	$validation = new Validation();
      	//do ALL validation
       	$validation->validate('zipCode',$this->zip);
       	$validation->validate('telephone',$this->phone);
       	$validation->validate('city',$this->city);
       	$validation->validate('state',$this->state);
+		$errors = $validation->getErrors();
      	if(!empty($errors)) {
-     	   throw new OrdrinExceptionBadValue($validation->getErrors());
+     	   throw new OrdrinExceptionBadValue($errors);
       	}
     }
 

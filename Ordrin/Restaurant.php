@@ -46,13 +46,13 @@ class Restaurant extends OrdrinApi {
     	$validation = new Validation($errors);
     	$validation->validate('restaurantID',$rID);
         try {
-          $addr->validate($errors);
+          $addr->validate();
         } catch (OrdrinExceptionBadValue $ex) {
-          $errors[] = $ex.__toString();
+	      $errors = array_merge($errors,$ex);
         }
         
         if(!empty($errors)){
-        	throw new OrdrinExceptionBadValue($validation->getErrors());
+        	throw new OrdrinExceptionBadValue($errors);
 		}
         
         $dt = $this->format_datetime($date_time);
@@ -87,12 +87,12 @@ class Restaurant extends OrdrinApi {
     	$validation->validate('money',$subtotal);
     	(empty($tip)) ? $tip = 0 : $validation->validate('money',$tip);
         try {
-          $addr->validate($validation->getErrors());
+          $addr->validate();
         } catch (OrdrinExceptionBadValue $ex) {
-          $errors[] = $ex.__toString();
+	      $errors = array_merge($errors,$ex);
         }
         if(!empty($errors)) {
-          throw new OrdrinExceptionBadValue($validation->getErrors());
+          throw new OrdrinExceptionBadValue($errors);
         }
         $dt = $this->format_datetime($date_time);
         return $this->_call_api("GET",
@@ -117,10 +117,11 @@ class Restaurant extends OrdrinApi {
      * @return object An object containing basic & menu information for restaurant
      */
     function details($rID) {
-    	$validation = new Validation();
+		$errors = array();
+    	$validation = new Validation($errors);
     	$validation->validate('restaurantID',$rID);
     	if(!empty($errors)){
-    		throw new OrdrinExceptionBadvalue($validation->getErrors());
+    		throw new OrdrinExceptionBadvalue($errors);
     	}
         return $this->_call_api("GET",
                                array("rd",$rID)

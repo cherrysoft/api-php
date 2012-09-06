@@ -31,20 +31,20 @@ class Order extends OrdrinApi {
           $date = $this->format_date($date_time);
           $time = $this->format_time($date_time);
         }
-        $errors = array();
-        $validation = new Validation($errors);
+        $validation = new Validation();
         $validation->validate('restaurantID',$rID);
         $validation->validate('email',$email);
         $validation->validate('money',$tip);
+		$errors = $validation->getErrors();
         try {
-          $tray->validate($validation->getErrors());
-          $addr->validate($validation->getErrors());
-          $credit_card->validate($validation->getErrors());
+          $tray->validate();
+          $addr->validate();
+          $credit_card->validate();
         } catch (OrdrinExceptionBadValue $ex) {
-          $errors[] = $ex.__toString();
+	      $errors[]= $ex->getMessage();
         }
         if(!empty($errors)) {
-          throw new OrdrinExceptionBadValue($validation->getErrors());
+          throw new OrdrinExceptionBadValue($errors);
         }
         $params =  array(
                                 'restaurant_id' => $rID,

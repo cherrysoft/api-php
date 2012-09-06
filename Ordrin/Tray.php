@@ -15,14 +15,14 @@ class Tray {
       array_push($this->items, $item);
     }
     
-    function validate($errors = null) {
-      if(!$errors) $errors = array();
+    function validate() {
+      $errors = array();
       if(is_array($this->items) && !empty($this->items) && $this->items[0] instanceof TrayItem) {
         foreach($this->items as $item) {
           try {
-            $item->validate($errors);
+            $item->validate();
            } catch (OrdrinExceptionBadValue $ex) {
-            $errors[] = $ex.__toString();
+		      $errors[]= $ex->getMessage();
           }
         }
       }
@@ -31,7 +31,7 @@ class Tray {
       	$validation->validate('trayItems',$this->items);
       }
       if(!empty($errors)) {
-        throw new OrdrinExceptionBadValue($validation->getErrors());
+        throw new OrdrinExceptionBadValue($errors);
       }
     }
 

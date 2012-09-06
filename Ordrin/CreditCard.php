@@ -14,19 +14,19 @@ class CreditCard {
       $this->validate();
     }
 
-    function validate($errors = null) {
-    	if(!$errors) $errors = array();
+    function validate() {
     	$validation = new Validation($errors);
     	$validation->validate('expirationDate',$this->expiration);
     	$validation->validate('CVC',$this->cvc);
     	$validation->validate('cardNumber',$this->$number);
+		$errors = $validation->getErrors();
     	try {
     		$this->address->validate();
     	} catch (OrdrinExceptionBadValue $ex) {
-    		$errors[] = $ex.__toString();
+			  $errors[]= $ex->getMessage();
     	}
       if(!empty($errors)) {
-        throw new OrdrinExceptionBadValue($validation->getErrors());
+        throw new OrdrinExceptionBadValue($errors);
       }
     }
     

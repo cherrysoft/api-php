@@ -8,12 +8,11 @@ class TrayItem {
       $this->quantity = $quantity;
       if($options != null)
         $this->options = $options;
-      
-      $this->validate();
+      	$this->validate();
     }
 
-    function validate($errors=null) {
-      $validation = new Validation($errors);
+    function validate() {
+      $validation = new Validation();
       $validation->validate('itemID',$this->itemId);
       $validation->validate('quantity',$this->quantity);
       if(isset($this->options)) {
@@ -21,8 +20,9 @@ class TrayItem {
       		$validation->validate('option', $option);
       	}
       }
+	  $errors = $validation->getErrors();
       if(!empty($errors)) {
-        throw new OrdrinExceptionBadValue($validation->getErrors());
+        throw new OrdrinExceptionBadValue($errors);
       }
     }
 

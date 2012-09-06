@@ -15,7 +15,7 @@ class User extends OrdrinApi {
     	$validation->validate('lastName', $lName);
 		$errors = $validation->getErrors();
         if(!empty($errors)) {
-          throw new OrdrinExceptionBadValue($validation->getErrors());
+          throw new OrdrinExceptionBadValue($errors);
         }
         
         return $this->_call_api('POST',
@@ -130,18 +130,18 @@ class User extends OrdrinApi {
     }
 
     function setCard($cardNick, $name, $number, $cvc, $expiryMonth, $expiryYear, $addr) {
-    	$errors = array();
-        $validation = new Validation($errors);
+        $validation = new Validation();
         $validation->validate('expirationDate',$expiryMonth . '/' . $expiryYear);
         $validation->validate('cvc',$this->cvc);
         $validation->validate('cardNumber',$this->number);
+		$errors = $validation->getErrors();
         try {
-          $addr->validate($errors);
+          $addr->validate();
         } catch (OrdrinExceptionBadValue $ex) {
-          $errors = $ex.__toString();
+          $errors[]= $ex->getMessage();
         }
         if(!empty($errors)) {
-          throw new OrdrinExceptionBadValue($validation->getErrors());
+          throw new OrdrinExceptionBadValue($errors);
         }
         return $this->_call_api('PUT',
                                array(
