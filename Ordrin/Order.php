@@ -31,35 +31,21 @@ class Order extends OrdrinApi {
           $date = $this->format_date($date_time);
           $time = $this->format_time($date_time);
         }
-        
-        $validation = new Validation();
+        $errors = array();
+        $validation = new Validation($errors);
         $validation->validate('restaurantID',$rID);
         $validation->validate('email',$email);
         $validation->validate('money',$tip);
-    	$_errors = $validation -> errors;
-                
         try {
-          $tray->validate();
+          $tray->validate($validation->getErrors());
+          $addr->validate($validation->getErrors());
+          $credit_card->validate($validation->getErrors());
         } catch (OrdrinExceptionBadValue $ex) {
-          $_errors[] = $ex.__toString();
+          $errors[] = $ex.__toString();
         }
-        
-        try {
-          $addr->validate();
-        } catch (OrdrinExceptionBadValue $ex) {
-          $_errors[] = $ex.__toString();
+        if(!empty($errors)) {
+          throw new OrdrinExceptionBadValue($validation->getErrors());
         }
-        
-        try {
-          $credit_card->validate();
-        } catch (OrdrinExceptionBadValue $ex) {
-          $_errors[] = $ex.__toString();
-        }
-        
-        if(!empty($_errors)) {
-          throw new OrdrinExceptionBadValue($_errors);
-        }
-
         $params =  array(
                                 'restaurant_id' => $rID,
                                 'tray' => $tray->_convertForAPI(),
@@ -91,7 +77,6 @@ class Order extends OrdrinApi {
             $params['pw'] = $password;
           }
         }
-
         return $this->_call_api('POST',
                                 array(
                                     'o',

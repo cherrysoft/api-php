@@ -12,8 +12,8 @@ class TrayItem {
       $this->validate();
     }
 
-    function validate($element = "all") {
-      $validation = new Validation();
+    function validate($errors=null) {
+      $validation = new Validation($errors);
       $validation->validate('itemID',$this->itemId);
       $validation->validate('quantity',$this->quantity);
       if(isset($this->options)) {
@@ -21,8 +21,8 @@ class TrayItem {
       		$validation->validate('option', $option);
       	}
       }
-      if(!empty($validation->errors)) {
-        throw new OrdrinExceptionBadValue($validation->errors);
+      if(!empty($errors)) {
+        throw new OrdrinExceptionBadValue($validation->getErrors());
       }
     }
 

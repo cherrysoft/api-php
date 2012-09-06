@@ -191,7 +191,7 @@ class OrdrinApi {
     }
 
     public function authenticate($email, $password) {
-      if(!preg_match("/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/", $email)) {
+      if(!preg_match('/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i', $email)) {
         throw new OrdrinExceptionBadValue(array('User - validation - Email (invalid) (' . $email . ')'));
       }
     

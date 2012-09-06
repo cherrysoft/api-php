@@ -8,15 +8,14 @@ class User extends OrdrinApi {
     }
 
     function create($email, $password, $fName, $lName) {
-        
-    	$_errors = array();
     	$validation = new Validation();
     	$validation->validate('email', $email);
     	$validation->validate('password', $password);
-    	$validation->validate('First Name', $fName);
-    	$validation->validate('Last Name', $lName);
-        if(!empty($validation -> errors)) {
-          throw new OrdrinExceptionBadValue($_errors);
+    	$validation->validate('firstName', $fName);
+    	$validation->validate('lastName', $lName);
+		$errors = $validation->getErrors();
+        if(!empty($errors)) {
+          throw new OrdrinExceptionBadValue($validation->getErrors());
         }
         
         return $this->_call_api('POST',
@@ -73,7 +72,6 @@ class User extends OrdrinApi {
 
     function setAddress($nick, $addr) {
         $addr->validate();
-
         return $this->_call_api('PUT',
                                array(
                                 'u',
@@ -132,19 +130,18 @@ class User extends OrdrinApi {
     }
 
     function setCard($cardNick, $name, $number, $cvc, $expiryMonth, $expiryYear, $addr) {
-        $validation = new Validation();
+    	$errors = array();
+        $validation = new Validation($errors);
         $validation->validate('expirationDate',$expiryMonth . '/' . $expiryYear);
-        $validation->validate('CVC',$this->cvc);
+        $validation->validate('cvc',$this->cvc);
         $validation->validate('cardNumber',$this->number);
-    	$_errors = $validation->errors;
         try {
-          $addr->validate();
+          $addr->validate($errors);
         } catch (OrdrinExceptionBadValue $ex) {
-          $_errors[] = $ex.__toString();
+          $errors = $ex.__toString();
         }
-        
-        if(!empty($_errors)) {
-          throw new OrdrinExceptionBadValue($_errors);
+        if(!empty($errors)) {
+          throw new OrdrinExceptionBadValue($validation->getErrors());
         }
         return $this->_call_api('PUT',
                                array(

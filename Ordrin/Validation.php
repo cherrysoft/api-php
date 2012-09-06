@@ -1,38 +1,45 @@
 <?php
 
 class Validation {
-	public $errors = array();
-	public function validate($field,$value,$required = false){
-		$mapFunctions=array(
-			'email' => 'validateEmail',		
-			'restaurantID' => 'validateInteger',		
-			'itemID' => 'validateInteger',		
-			'quantity' => 'validateInteger',		
-			'option' => 'validateInteger',		
-			'money' => 'validateMoney',		
-			'trayItems' => 'validateTrayItems',		
-			'zipCode' => 'validateZipCode',		
-			'telephone' => 'validatePhone',		
-			'city' => 'validateCity',		
-			'state' => 'validateState',		
-			'URL' => 'validateURL',		
-			'CVC' => 'validateCVC',		
-			'expirationDate' => 'validateExpirationDate',		
+	private $errors = array();
+	private $mapFunctions=array(
+			'password' => 'validateText',
+			'firstName' => 'validateText',
+			'lastName' => 'validateText',
+			'text' => 'validateText',
+			'email' => 'validateEmail',
+			'restaurantId' => 'validateInteger',
+			'itemId' => 'validateInteger',
+			'quantity' => 'validateInteger',
+			'option' => 'validateInteger',
+			'money' => 'validateMoney',
+			'trayItems' => 'validateTrayItems',
+			'zipCode' => 'validateZipCode',
+			'telephone' => 'validatePhone',
+			'city' => 'validateCity',
+			'state' => 'validateState',
+			'url' => 'validateURL',
+			'cvc' => 'validateCVC',
+			'expirationDate' => 'validateExpirationDate',
 			'cardNumber' => 'validateCardNumber'
-			);
+	);
+	public function __construct(&$errors = null){
+		if($errors){
+			$this->errors = $errors;
+		}
+	}
+	public function getErrors(){
+		return $this->errors;
+	}
+	public function validate($field,$value,$required = false){
 		if(!$required && empty($value)){
+
 			return true;
 		}
-		else if($mapFunctions[$field] && method_exists(__CLASS__,$mapFunctions[$field])){
-				return $this->$mapFunctions[$field]($value);
+		else if($this->mapFunctions[$field] && method_exists(__CLASS__,$this->mapFunctions[$field])){
+				$function = $this->mapFunctions[$field];
+				return $this->$function($value);
 			}
-		else{
-			//No validation function. Check if is empty.
-			if(empty($value)){
-				$this->errors[] = 'Validation - Required (' . $field . ')';
-				return false;
-			}
-		}
 	}
 	public function validateInteger ($value){
 		if(!preg_match('/^\d+$/', $value) || $value == ''){
@@ -54,6 +61,13 @@ class Validation {
 			return false;
 		}
 		return true;	
+	}
+	public function validateText ($value){
+		if(!preg_match('/^[\w]+$/i', $value)){
+			$this->errors[] = 'Validation - Text (invalid) (' . $value . ')';
+			return false;
+		}
+		return true;
 	}
 	public function validateEmail ($value){
 		if(!preg_match('/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i', $value)){
@@ -105,8 +119,8 @@ class Validation {
 		return true;
 	}
 	public function validateExpirationDate ($value){
-		if(!preg_match('/^\d{2}\/\d{4}$/', $value)){
-			$this->errors[] = 'Validation - Expiration Date (invalid, must be in format mm/yyyy) (' . $value . ')';
+		if(!preg_match('/^\d{2}\/(\d{2}|\d{4})$/', $value)){
+			$this->errors[] = 'Validation - Expiration Date (invalid, must be in format mm/yy or mm/yyyy) (' . $value . ')';
 			return false;
 		}
 		return true;

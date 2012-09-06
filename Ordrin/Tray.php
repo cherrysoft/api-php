@@ -5,7 +5,6 @@ class Tray {
 
     function __construct($items = null) {
       $this->items = $items;
-      
       $this->validate();
     }
 
@@ -16,25 +15,23 @@ class Tray {
       array_push($this->items, $item);
     }
     
-    function validate() {
-      $_errors = array();
+    function validate($errors = null) {
+      if(!$errors) $errors = array();
       if(is_array($this->items) && !empty($this->items) && $this->items[0] instanceof TrayItem) {
         foreach($this->items as $item) {
           try {
-            $item->validate();
+            $item->validate($errors);
            } catch (OrdrinExceptionBadValue $ex) {
-            $_errors[] = $ex.__toString();
+            $errors[] = $ex.__toString();
           }
         }
       }
       else{
-      	$validation = new Validation();
+      	$validation = new Validation($errors);
       	$validation->validate('trayItems',$this->items);
-      	if(!empty($validation->errors)) $_errors[] = $validation->errors[0];
       }
-      
-      if(!empty($_errors)) {
-        throw new OrdrinExceptionBadValue($_errors);
+      if(!empty($errors)) {
+        throw new OrdrinExceptionBadValue($validation->getErrors());
       }
     }
 
