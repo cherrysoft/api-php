@@ -1,45 +1,37 @@
 <?php
 
-/* Address Class */
+/* TrayItem Class */
 class TrayItem {
 
     function __construct($itemId, $quantity, $options = null) {
       $this->itemId = $itemId;
       $this->quantity = $quantity;
-      $this->options = $options;
+      if($options != null)
+        $this->options = $options;
+      	$this->validate();
     }
 
-    function validate($element = "all") {
-        if ($element == 'zip' && !preg_match('/(^\d{5}$)|(^\d{5}-\d{4}$)/', $this->$element)) {
-            parent::$_errors[] = 'Address - validation - zip code (invalid) (' . $this->$element . ')';
-        } elseif ($element == 'phone' && !preg_match('/(^\(?(\d{3})\)?[- .]?(\d{3})[- .]?(\d{4})$)/', $this->$element)) {
-            parent::$_errors[] = 'Address - validation - phone number (invalid) (' . $this->$element . ')';
-        } elseif ($element == 'city' && !preg_match('/[A-z.-]/', $this->$element)) {
-            parent::$_errors[] = 'Address - validation - city (invalid, only letters/spaces allowed) (' . $this->$element . ')';
-        } elseif ($element == 'state' && !preg_match('/^([A-z]){2}$/', $this->$element)) {
-            parent::$_errors[] = 'Address - validation - state (invalid, only letters allowed and must be passed as two-letter abbreviation) (' . $this->$element . ')';
-        } else {
-            // do ALL validation
-            if (!preg_match('/(^\d{5}$)|(^\d{5}-\d{4}$)/', $this->zip)) {
-                parent::$_errors[] = 'Address - validation - zip code (invalid) (' . $this->zip . ')';
-            }
-
-            if (!preg_match('/(^\(?(\d{3})\)?[- .]?(\d{3})[- .]?(\d{4})$)/', $this->phone) && $this->phone != "") {
-                parent::$_errors[] = 'Address - validation - phone number (invalid) (' . $this->phone . ')';
-            }
-
-            if (!preg_match('/[A-z.-]/', $this->city)) {
-                parent::$_errors[] = 'Address - validation - city (invalid, only letters/spaces allowed) (' . $this->city . ')';
-            }
-            
-            if (!preg_match('/^([A-z]){2}$/', $this->state)  && $this->$state != "") {
-                parent::$_errors[] = 'Address - validation - state (invalid, only letters allowed and must be passed as two-letter abbreviation) (' . $this->state . ')';
-            }
-        }
+    function validate() {
+      $validation = new Validation();
+      $validation->validate('itemID',$this->itemId);
+      $validation->validate('quantity',$this->quantity);
+      if(isset($this->options)) {
+      	foreach($this->options as $option) {
+      		$validation->validate('option', $option);
+      	}
+      }
+	  $errors = $validation->getErrors();
+      if(!empty($errors)) {
+        throw new OrdrinExceptionBadValue($errors);
+      }
     }
 
     function _convertForAPI() {
-        return $this->__get('zip') . '/' . $this->__get('city') . '/' . $this->__get('street');
+      $api_string = $this->__get('itemId') . '/' . $this->__get('quantity');
+      if(isset($this->options)) {
+        $api_string .= "," . implode($this->__get('options'), ",");
+      }
+      return $api_string;
     }
 
     function __set($name, $value) {
@@ -50,3 +42,5 @@ class TrayItem {
         return $this->$name;
     }
 }
+
+?>

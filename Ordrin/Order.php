@@ -31,10 +31,21 @@ class Order extends OrdrinApi {
           $date = $this->format_date($date_time);
           $time = $this->format_time($date_time);
         }
-
-        $addr->validate();
-        $credit_card->address->validate();
-
+        $validation = new Validation();
+        $validation->validate('restaurantID',$rID);
+        $validation->validate('email',$email);
+        $validation->validate('money',$tip);
+		$errors = $validation->getErrors();
+        try {
+          $tray->validate();
+          $addr->validate();
+          $credit_card->validate();
+        } catch (OrdrinExceptionBadValue $ex) {
+	      $errors[]= $ex->getMessage();
+        }
+        if(!empty($errors)) {
+          throw new OrdrinExceptionBadValue($errors);
+        }
         $params =  array(
                                 'restaurant_id' => $rID,
                                 'tray' => $tray->_convertForAPI(),
@@ -66,7 +77,6 @@ class Order extends OrdrinApi {
             $params['pw'] = $password;
           }
         }
-
         return $this->_call_api('POST',
                                 array(
                                     'o',

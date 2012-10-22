@@ -1,5 +1,5 @@
 <?php
-ini_set("display_errors",1);
+ini_set("display_errors", 1);
 
 function __autoload($name) {
     require_once($name . '.php');
@@ -14,7 +14,7 @@ function __autoload($name) {
 class OrdrinApi {
     const CUSTOM_SERVERS = -1;
     const TEST_SERVERS = 0;
-    const PROD_SERVERS = 1; 
+    const PROD_SERVERS = 1;
 
     protected $userAgent = "ordrin-php/2.0";
     protected $restaurant_url, $user_url, $order_url, $_key, $_server; 
@@ -35,8 +35,22 @@ class OrdrinApi {
 
         switch($servers) {
           case self::CUSTOM_SERVERS:
-            if(empty($restaurant_url) || empty($user_url) || empty($order_url)) {
-              //TODO: Throw error if no urls set
+            $_errors = array();
+            
+            if(!preg_match('/^(http|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:\/~\+#]*[\w\-\@?^=%&amp;\/~\+#])?$/', $restaurant_url)) {
+              $_errors[] = 'OrdrinAPI - Validation - Restaurant URL (invalid) (' . $restaurant_url . ')';
+            }
+            
+            if(!preg_match('/^(http|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:\/~\+#]*[\w\-\@?^=%&amp;\/~\+#])?$/', $user_url)) {
+              $_errors[] = 'OrdrinAPI - Validation - Restaurant URL (invalid) (' . $user_url . ')';
+            }
+            
+            if(!preg_match('/^(http|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:\/~\+#]*[\w\-\@?^=%&amp;\/~\+#])?$/', $order_url)) {
+              $_errors[] = 'OrdrinAPI - Validation - Restaurant URL (invalid) (' . $order_url . ')';
+            }
+            
+            if(!empty($_errors)) {
+              throw new OrdrinExceptionBadValue($_errors);
             }
             
             $this->restaurant_url = $restaurant_url;
@@ -53,6 +67,8 @@ class OrdrinApi {
             $this->user_url = "https://u-test.ordr.in";
             $this->order_url = "https://o-test.ordr.in";
             break;
+          default:
+            throw new OrdrinExceptionBadValue(array('OrdrinAPI - Validation - Servers (invalid, must be either OrdrinApi::CUSTOM_SERVERS, TEST_SERVERS, or PROD_SERVERS)'));
         }
 
         $this->restaurant = new Restaurant($key, $this->restaurant_url);
@@ -84,6 +100,7 @@ class OrdrinApi {
      * @return object An object containing the response information
      */
     protected function _call_api($method, $params, $data=null, $login=null) {
+      $_errors = array();
       $uri = '';
       $cleanuri = '';
       foreach($params as $param) {
@@ -119,8 +136,11 @@ class OrdrinApi {
           $post_fields='';
           if(isset($data)){
             $post_fields  = http_build_query($data);
-            curl_setopt($ch,CURLOPT_POST,true);
-            curl_setopt($ch,CURLOPT_POSTFIELDS,$post_fields);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $post_fields);
+          }
+          else {
+            $_errors[] = 'OrdrinAPI API Call - Warning - No POST data provided for POST request';
           }
 
           $respBody = curl_exec($ch);
@@ -146,10 +166,13 @@ class OrdrinApi {
           $respBody = curl_exec($ch);
           $respInfo = curl_getinfo($ch);
           break;
+        default:
+            throw new OrdrinExceptionBadValue(array('OrdrinAPI API Call - Validation - Method (invalid, must be either GET, POST, PUT, or DELETE)'));
       }
 
       if($respInfo['http_code'] > 400) {
-        throw new OrdrinExceptionApiInvalidResponse(array("API returned an HTTP status of ".$respInfo['http_code']));
+        $_errors[] = "API returned an HTTP status of ".$respInfo['http_code'];
+        throw new OrdrinExceptionBadValue($_errors);
       }
 
       curl_close($ch);
@@ -160,13 +183,18 @@ class OrdrinApi {
         if(isset($json->text)) {
           $string .= ' - '.$json->text;
         }
-        throw new OrdrinExceptionApiError(array("API error: ".$string));
+        $_errors[] = "API error: " . $string;
+        throw new OrdrinExceptionBadValue($_errors);
       }
-
+      
       return $json;
     }
 
     public function authenticate($email, $password) {
+      if(!preg_match('/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i', $email)) {
+        throw new OrdrinExceptionBadValue(array('User - validation - Email (invalid) (' . $email . ')'));
+      }
+    
       self::$_email = $email;
       self::$_password = $password;
     }
@@ -217,9 +245,19 @@ class OrdrinApi {
 
 // Exceptions
 Class OrdrinException extends Exception {
-      public function __construct($aMessages, $code = 0, Exception $previous = null) {
-        $message = implode(", ", $aMessages);
-        parent::__construct($message, $code, $previous);
+    public function __construct($aMessages, $code = 0, Exception $previous = null) {
+        if(is_array($aMessages)) {
+          $message = implode(", ", $aMessages);
+        }
+        else {
+          $message = $aMessages;
+        }
+        if(isset($previous)) {
+          parent::__construct($message, $code, $previous);
+        }
+        else {
+          parent::__construct($message, $code);
+        }
     }
 
     // custom string representation of object
@@ -229,31 +267,12 @@ Class OrdrinException extends Exception {
 }
 
 Class OrdrinExceptionBadValue extends OrdrinException {
-      public function __construct($aMessages, $code = 0, Exception $previous = null) {
-        parent::__construct($aMessages, $code, $previous);
-    }
-
-    public function __toString() {
-        return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
-    }
 }
 
 Class OrdrinExceptionApiError extends OrdrinException {
-      public function __construct($aMessages, $code = 0, Exception $previous = null) {
-        parent::__construct($aMessages, $code, $previous);
-    }
-
-    public function __toString() {
-        return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
-    }
 } 
 
 Class OrdrinExceptionApiInvalidResponse extends OrdrinException {
-      public function __construct($aMessages, $code = 0, Exception $previous = null) {
-        parent::__construct($aMessages, $code, $previous);
-    }
-
-    public function __toString() {
-        return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
-    }
 }
+
+?>

@@ -11,11 +11,25 @@ class CreditCard {
       $this->cvc = $cvc;
       $this->number = $number;
       $this->expiration = $expMonth."/".$expYear;
+      $this->validate();
     }
 
-    function validate($element = "all") {
+    function validate() {
+    	$validation = new Validation($errors);
+    	$validation->validate('expirationDate',$this->expiration);
+    	$validation->validate('CVC',$this->cvc);
+    	$validation->validate('cardNumber',$this->$number);
+		$errors = $validation->getErrors();
+    	try {
+    		$this->address->validate();
+    	} catch (OrdrinExceptionBadValue $ex) {
+			  $errors[]= $ex->getMessage();
+    	}
+      if(!empty($errors)) {
+        throw new OrdrinExceptionBadValue($errors);
+      }
     }
-
+    
     function __set($name, $value) {
         $this->$name = $value;
     }
@@ -24,3 +38,5 @@ class CreditCard {
         return $this->$name;
     }
 }
+
+?>

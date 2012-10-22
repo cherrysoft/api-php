@@ -1,4 +1,6 @@
 <?php
+
+/* User API */
 class User extends OrdrinApi {
     function __construct($key,$base_url){
       $this->_key = $key;
@@ -6,6 +8,16 @@ class User extends OrdrinApi {
     }
 
     function create($email, $password, $fName, $lName) {
+    	$validation = new Validation();
+    	$validation->validate('email', $email);
+    	$validation->validate('password', $password);
+    	$validation->validate('firstName', $fName);
+    	$validation->validate('lastName', $lName);
+		$errors = $validation->getErrors();
+        if(!empty($errors)) {
+          throw new OrdrinExceptionBadValue($errors);
+        }
+        
         return $this->_call_api('POST',
                                 array(
                                  'u',
@@ -20,7 +32,6 @@ class User extends OrdrinApi {
     }
 
     function getAccountInfo() {
-
         return $this->_call_api('GET',
                                array(
                                  'u',
@@ -59,9 +70,8 @@ class User extends OrdrinApi {
         }
     }
 
-    function setAddress($nick,$addr) {
+    function setAddress($nick, $addr) {
         $addr->validate();
-
         return $this->_call_api('PUT',
                                array(
                                 'u',
@@ -119,9 +129,20 @@ class User extends OrdrinApi {
         }
     }
 
-    function setCard($cardNick, $name, $number, $cvv, $expiryMonth, $expiryYear, $addr) {
-        //$addr->validate();
-
+    function setCard($cardNick, $name, $number, $cvc, $expiryMonth, $expiryYear, $addr) {
+        $validation = new Validation();
+        $validation->validate('expirationDate',$expiryMonth . '/' . $expiryYear);
+        $validation->validate('cvc',$this->cvc);
+        $validation->validate('cardNumber',$this->number);
+		$errors = $validation->getErrors();
+        try {
+          $addr->validate();
+        } catch (OrdrinExceptionBadValue $ex) {
+          $errors[]= $ex->getMessage();
+        }
+        if(!empty($errors)) {
+          throw new OrdrinExceptionBadValue($errors);
+        }
         return $this->_call_api('PUT',
                                array(
                                  'u',
