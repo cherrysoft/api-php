@@ -13,7 +13,7 @@ class TrayItem {
 
     function validate() {
       $validation = new Validation();
-      $validation->validate('itemID',$this->itemId);
+      $validation->validate('itemId',$this->itemId);
       $validation->validate('quantity',$this->quantity);
       if(isset($this->options)) {
       	foreach($this->options as $option) {
