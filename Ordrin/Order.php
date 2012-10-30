@@ -32,7 +32,7 @@ class Order extends OrdrinApi {
           $time = $this->format_time($date_time);
         }
         $validation = new Validation();
-        $validation->validate('restaurantID',$rID);
+        $validation->validate('restaurantId',$rID);
         $validation->validate('email',$email);
         $validation->validate('money',$tip);
 		$errors = $validation->getErrors();
