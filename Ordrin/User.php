@@ -153,7 +153,7 @@ class User extends OrdrinApi {
                              array(
                                  'name' => $name,
                                  'number' => $number,
-                                 'cvc' => $cvv,
+                                 'cvc' => $cvc,
                                  'expiry_month' => $expiryMonth,
                                  'expiry_year' => $expiryYear,
                                  'bill_addr' => $addr->street,
