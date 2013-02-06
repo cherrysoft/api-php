@@ -125,7 +125,7 @@ $ordrin->user->getOrderHistory();
 $ordrin->user->getOrderHistory(order_id);
 
 // Update the user's password
-$ordrin->user->updatePassword(sha256encodedpw));
+$ordrin->user->updatePassword(sha256encodedpw);
 ```
 
 Order API Functions
