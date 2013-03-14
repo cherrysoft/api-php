@@ -21,13 +21,13 @@ Data Structures
 ---------------
 
 ```php
-$ordrin::address(address, city, state, zip, phone, address2);
+OrdrinApi::address(address, city, state, zip, phone, address2);
 
-$ordrin::creditCard(name, expiration_month, expiration_year, number, cvc, address);
+OrdrinApi::creditCard(name, expiration_month, expiration_year, number, cvc, address);
 
-$ordrin::trayItem(item_id, quantity, *options);
+OrdrinApi::trayItem(item_id, quantity, *options);
 
-$ordrin::tray(*items);
+OrdrinApi::tray(*items);
 ```
 
 Exceptions
