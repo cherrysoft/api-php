@@ -132,8 +132,8 @@ class User extends OrdrinApi {
     function setCard($cardNick, $name, $number, $cvc, $expiryMonth, $expiryYear, $addr) {
         $validation = new Validation();
         $validation->validate('expirationDate',$expiryMonth . '/' . $expiryYear);
-        $validation->validate('cvc',$this->cvc);
-        $validation->validate('cardNumber',$this->number);
+        $validation->validate('cvc',$cvc);
+        $validation->validate('cardNumber',$number);
 		$errors = $validation->getErrors();
         try {
           $addr->validate();
@@ -153,7 +153,7 @@ class User extends OrdrinApi {
                              array(
                                  'name' => $name,
                                  'number' => $number,
-                                 'cvc' => $cvv,
+                                 'cvc' => $cvc,
                                  'expiry_month' => $expiryMonth,
                                  'expiry_year' => $expiryYear,
                                  'bill_addr' => $addr->street,
