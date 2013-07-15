@@ -52,6 +52,7 @@ class APIs{
   public function ($args){
     /*
       Arguments:
+    rid--Ordr.in's unique restaurant identifier for the restaurant.
     tip--Tip amount in dollars and cents
     first_name--The customer's first name
     last_name--The customer's last name
@@ -59,7 +60,6 @@ class APIs{
     current_password -- The user's current password
 
     Keyword Arguments:
-    rid--Ordr.in's unique restaurant identifier for the restaurant.
     tray--Represents a tray of menu items in the format '[menu item id]/[qty],[option id],...,[option id]'
 
 

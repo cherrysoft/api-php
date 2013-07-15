@@ -212,6 +212,12 @@
       "type": "object",
       "title": "User Order",
       "description": "Place an order to a restaurant as a user",
+      "required": [
+        "rid",
+        "tip",
+        "first_name",
+        "last_name"
+      ],
       "meta": {
         "uri": "/o/{rid}",
         "method": "POST",
@@ -249,11 +255,6 @@
           "default_value": "User"
         }
       },
-      "required": [
-        "tip",
-        "first_name",
-        "last_name"
-      ],
       "allOf": [
         {
           "split": true,
