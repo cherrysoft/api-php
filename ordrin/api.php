@@ -11,7 +11,7 @@ class APIs{
   
   // order endpoints
   
-  public function ($args){
+  public function order_guest($args){
     /*
       Arguments:
     rid--Ordr.in's unique restaurant identifier for the restaurant.
@@ -49,7 +49,7 @@ class APIs{
     return $helper->call_endpoint("order", "order_guest", array("rid"), $args);
   }
   
-  public function ($args){
+  public function order_user($args){
     /*
       Arguments:
     rid--Ordr.in's unique restaurant identifier for the restaurant.
@@ -97,7 +97,7 @@ class APIs{
   
   // restaurant endpoints
   
-  public function ($args){
+  public function delivery_check($args){
     /*
       Arguments:
     datetime--Delivery date and time
@@ -113,7 +113,7 @@ class APIs{
     return $helper->call_endpoint("restaurant", "delivery_check", array("rid", "datetime", "zip", "city", "addr"), $args);
   }
   
-  public function ($args){
+  public function delivery_list($args){
     /*
       Arguments:
     datetime--Delivery date and time
@@ -128,7 +128,7 @@ class APIs{
     return $helper->call_endpoint("restaurant", "delivery_list", array("datetime", "zip", "city", "addr"), $args);
   }
   
-  public function ($args){
+  public function fee($args){
     /*
       Arguments:
     datetime--Delivery date and time
@@ -146,7 +146,7 @@ class APIs{
     return $helper->call_endpoint("restaurant", "fee", array("rid", "subtotal", "tip", "datetime", "zip", "city", "addr"), $args);
   }
   
-  public function ($args){
+  public function restaurant_details($args){
     /*
       Arguments:
     rid--Ordr.in's unique restaurant identifier for the restaurant.
@@ -161,7 +161,7 @@ class APIs{
   
   // user endpoints
   
-  public function ($args){
+  public function change_password($args){
     /*
       Arguments:
     email--The user's email address
@@ -175,7 +175,7 @@ class APIs{
     return $helper->call_endpoint("user", "change_password", array("email"), $args);
   }
   
-  public function ($args){
+  public function create_account($args){
     /*
       Arguments:
     email--The user's email address
@@ -190,7 +190,7 @@ class APIs{
     return $helper->call_endpoint("user", "create_account", array("email"), $args);
   }
   
-  public function ($args){
+  public function create_addr($args){
     /*
       Arguments:
     email--The user's email address
@@ -210,7 +210,7 @@ class APIs{
     return $helper->call_endpoint("user", "create_addr", array("email", "nick"), $args);
   }
   
-  public function ($args){
+  public function create_cc($args){
     /*
       Arguments:
     email--The user's email address
@@ -233,7 +233,7 @@ class APIs{
     return $helper->call_endpoint("user", "create_cc", array("email", "nick"), $args);
   }
   
-  public function ($args){
+  public function delete_addr($args){
     /*
       Arguments:
     email--The user's email address
@@ -247,7 +247,7 @@ class APIs{
     return $helper->call_endpoint("user", "delete_addr", array("email", "nick"), $args);
   }
   
-  public function ($args){
+  public function delete_cc($args){
     /*
       Arguments:
     email--The user's email address
@@ -261,7 +261,7 @@ class APIs{
     return $helper->call_endpoint("user", "delete_cc", array("email", "nick"), $args);
   }
   
-  public function ($args){
+  public function get_account_info($args){
     /*
       Arguments:
     email--The user's email address
@@ -274,7 +274,7 @@ class APIs{
     return $helper->call_endpoint("user", "get_account_info", array("email"), $args);
   }
   
-  public function ($args){
+  public function get_all_saved_addrs($args){
     /*
       Arguments:
     email--The user's email address
@@ -287,7 +287,7 @@ class APIs{
     return $helper->call_endpoint("user", "get_all_saved_addrs", array("email"), $args);
   }
   
-  public function ($args){
+  public function get_all_saved_ccs($args){
     /*
       Arguments:
     email--The user's email address
@@ -300,7 +300,7 @@ class APIs{
     return $helper->call_endpoint("user", "get_all_saved_ccs", array("email"), $args);
   }
   
-  public function ($args){
+  public function get_order($args){
     /*
       Arguments:
     email--The user's email address
@@ -314,7 +314,7 @@ class APIs{
     return $helper->call_endpoint("user", "get_order", array("email", "oid"), $args);
   }
   
-  public function ($args){
+  public function get_order_history($args){
     /*
       Arguments:
     email--The user's email address
@@ -327,7 +327,7 @@ class APIs{
     return $helper->call_endpoint("user", "get_order_history", array("email"), $args);
   }
   
-  public function ($args){
+  public function get_saved_addr($args){
     /*
       Arguments:
     email--The user's email address
@@ -341,7 +341,7 @@ class APIs{
     return $helper->call_endpoint("user", "get_saved_addr", array("email", "nick"), $args);
   }
   
-  public function ($args){
+  public function get_saved_cc($args){
     /*
       Arguments:
     email--The user's email address
