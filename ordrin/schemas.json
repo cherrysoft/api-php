@@ -7,6 +7,7 @@
       "required": [
         "rid",
         "em",
+        "tray",
         "tip",
         "first_name",
         "last_name",
@@ -165,7 +166,7 @@
           "default_value": "555-555-5555"
         }
       },
-      "id": "addr",
+      "split_id": "addr",
       "allOf": [
         {
           "split": false,
@@ -214,6 +215,7 @@
       "description": "Place an order to a restaurant as a user",
       "required": [
         "rid",
+        "tray",
         "tip",
         "first_name",
         "last_name"
@@ -261,7 +263,7 @@
           "oneOf": [
             {
               "title": "Address",
-              "id": "addr",
+              "split_id": "addr",
               "required": [
                 "phone",
                 "zip",
@@ -311,7 +313,7 @@
             },
             {
               "title": "Saved Address",
-              "id": "saved_addr",
+              "split_id": "saved_addr",
               "required": [
                 "nick"
               ],
@@ -330,7 +332,7 @@
           "oneOf": [
             {
               "title": "Credit Card",
-              "id": "cc",
+              "split_id": "cc",
               "required": [
                 "card_number",
                 "card_cvc",
@@ -408,7 +410,7 @@
             },
             {
               "title": "Saved Credit Card",
-              "id": "saved_cc",
+              "split_id": "saved_cc",
               "required": [
                 "card_nick"
               ],
@@ -789,7 +791,7 @@
           "default_value": "NY"
         }
       },
-      "id": "addr"
+      "split_id": "addr"
     },
     "create_cc": {
       "type": "object",
