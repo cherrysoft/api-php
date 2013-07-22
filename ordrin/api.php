@@ -1,5 +1,6 @@
 <?php
 namespace Ordrin;
+include "api_helper.php";
 class APIs{
   const PRODUCTION = APIHelper::PRODUCTION;
   const TEST = APIHelper::TEST;

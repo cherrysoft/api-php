@@ -1,21 +1,25 @@
 <?php
 namespace Ordrin;
+include "JsonSchema/src/Pyrus/JsonSchema/JSV.php";
 use Pyrus\JsonSchema\JSV;
 class APIHelper{
   const PRODUCTION = 0;
   const TEST = 1;
 
-  private $ENDPONIT_INFO = json_decode(file_get_contents("./schemas.json"), true);
-
-  private $methods = array("GET" : HttpRequest::METH_GET,
-                           "POST" : HttpRequest::METH_POST,
-                           "PUT" : HttpRequest::METH_PUT,
-                           "DELETE" : HttpRequest::METH_DELETE);
-
   private $api_key;
   private $urls;
+  
+  private $ENDPOINT_INFO;
+
+  private $methods;
+
 
   public function __construct($api_key, $servers){
+    $this->$ENDPOINT_INFO = json_decode(file_get_contents("./schemas.json"), true);
+    $this->$methods = array("GET" => HttpRequest::METH_GET,
+                            "POST" => HttpRequest::METH_POST,
+                            "PUT" => HttpRequest::METH_PUT,
+                            "DELETE" => HttpRequest::METH_DELETE);
     $this->api_key = $api_key;
     if($servers == PRODUCTION){
       $this->$urls = array("restaurant" => "https://r.ordr.in",
@@ -32,7 +36,7 @@ class APIHelper{
     $full_url = $base_url . $uri;
     $headers = array("X-NAAMA-CLIENT-AUTHENTICATION" => "id=\"$api_key\", version=\"1\"");
     if(!is_null($login)){
-      $hash_code = hash("sha256", join('', array(login["password"], login["email"], uri)));
+      $hash_code = hash("sha256", join('', array($login["password"], $login["email"], $uri)));
       $headers["X-NAAMA-AUTHENTICATION"] = "username=\"$login[email]\", response=\"$hash_code\", version=\"1\"";
     }
     $request = new HttpRequest($full_url, $methods[$method]);
@@ -80,7 +84,7 @@ class APIHelper{
     $report = $env.validate($kwargs, $endpoint_data);
 
     if(!empty($report->errors)){
-      $msg = ""
+      $msg = "";
       foreach($report->errors as $error){
         $msg = $mgs . strval($error);
       }
