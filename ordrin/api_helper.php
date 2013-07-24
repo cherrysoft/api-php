@@ -5,6 +5,7 @@ require "JsonSchema/src/Loader.php";
 use Pyrus\JsonSchema\JSV;
 require "mutate.php";
 use \HttpRequest;
+use \Exception;
 class APIHelper{
   const PRODUCTION = 0;
   const TEST = 1;
@@ -44,10 +45,14 @@ class APIHelper{
     }
     $request = new HttpRequest($full_url, $this->methods[$method]);
     $request->addHeaders($headers);
+    switch($method){
+    case "POST" : $request->setPostFields($data); break;
+    case "PUT" : $request->setPutData($data); break;
+    default :break;
+    }
     $message = $request->send();
-    echo $message->getResponseStatus() . "\n";
     $response = $message->getBody();
-    $result = json_decode($response);
+    $result = json_decode($response, true);
     if(!is_null($result) && 
        array_key_exists('_error', $result) && 
        $result["error"]){
@@ -88,11 +93,10 @@ class APIHelper{
     }
     $env = JSV::createEnvironment(null);
     $report = $env->validate($kwargs, $endpoint_data);
-
-    if(!empty($report->errors)){
+    if(count($report->errors)){
       $msg = "";
       foreach($report->errors as $error){
-        $msg = $mgs . strval($error);
+        $msg = $msg . "\n" . strval($error->getMessage());
       }
       throw new Exception($msg);
     }

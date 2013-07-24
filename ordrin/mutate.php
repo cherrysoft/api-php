@@ -10,8 +10,8 @@ class Mutate{
   }
   
   public static function phone( $value ){
-    $value = preg_replace("\\D", "", $value);
-    return preg_replace("^(\\d{3})(\\d{3})(\\d{4})$", "$1-$2-$3");
+    $value = preg_replace('/\D/', "", $value);
+    return preg_replace('/^(\d{3})(\d{3})(\d{4})$/', '$1-$2-$3', $value);
   }
 
   public static function identity( $value ){
