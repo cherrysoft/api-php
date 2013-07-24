@@ -1,4 +1,5 @@
 <?php
+namespace Ordrin;
 class Mutate{
   public static function sha256( $value ){
     return hash("sha256", $value);

@@ -1,12 +1,14 @@
 <?php
 namespace Ordrin;
-include "api_helper.php";
+require "api_helper.php";
 class APIs{
   const PRODUCTION = APIHelper::PRODUCTION;
   const TEST = APIHelper::TEST;
 
+  private $helper;
+  
   public function __construct($api_key, $servers){
-    $helper = new APIHelper($api_key, $servers);
+    $this->helper = new APIHelper($api_key, $servers);
   }
 
   
@@ -47,7 +49,7 @@ class APIs{
     OR
     delivery_date--Delivery date
      */
-    return $helper->call_endpoint("order", "order_guest", array("rid"), $args);
+    return $this->helper->call_endpoint("order", "order_guest", array("rid"), $args);
   }
   
   public function order_user($args){
@@ -92,7 +94,7 @@ class APIs{
     OR
     delivery_date--Delivery date
      */
-    return $helper->call_endpoint("order", "order_user", array("rid"), $args);
+    return $this->helper->call_endpoint("order", "order_user", array("rid"), $args);
   }
   
   
@@ -111,7 +113,7 @@ class APIs{
 
 
      */
-    return $helper->call_endpoint("restaurant", "delivery_check", array("rid", "datetime", "zip", "city", "addr"), $args);
+    return $this->helper->call_endpoint("restaurant", "delivery_check", array("rid", "datetime", "zip", "city", "addr"), $args);
   }
   
   public function delivery_list($args){
@@ -126,7 +128,7 @@ class APIs{
 
 
      */
-    return $helper->call_endpoint("restaurant", "delivery_list", array("datetime", "zip", "city", "addr"), $args);
+    return $this->helper->call_endpoint("restaurant", "delivery_list", array("datetime", "zip", "city", "addr"), $args);
   }
   
   public function fee($args){
@@ -144,7 +146,7 @@ class APIs{
 
 
      */
-    return $helper->call_endpoint("restaurant", "fee", array("rid", "subtotal", "tip", "datetime", "zip", "city", "addr"), $args);
+    return $this->helper->call_endpoint("restaurant", "fee", array("rid", "subtotal", "tip", "datetime", "zip", "city", "addr"), $args);
   }
   
   public function restaurant_details($args){
@@ -156,7 +158,7 @@ class APIs{
 
 
      */
-    return $helper->call_endpoint("restaurant", "restaurant_details", array("rid"), $args);
+    return $this->helper->call_endpoint("restaurant", "restaurant_details", array("rid"), $args);
   }
   
   
@@ -173,7 +175,7 @@ class APIs{
 
 
      */
-    return $helper->call_endpoint("user", "change_password", array("email"), $args);
+    return $this->helper->call_endpoint("user", "change_password", array("email"), $args);
   }
   
   public function create_account($args){
@@ -188,7 +190,7 @@ class APIs{
 
 
      */
-    return $helper->call_endpoint("user", "create_account", array("email"), $args);
+    return $this->helper->call_endpoint("user", "create_account", array("email"), $args);
   }
   
   public function create_addr($args){
@@ -208,7 +210,7 @@ class APIs{
 
 
      */
-    return $helper->call_endpoint("user", "create_addr", array("email", "nick"), $args);
+    return $this->helper->call_endpoint("user", "create_addr", array("email", "nick"), $args);
   }
   
   public function create_cc($args){
@@ -231,7 +233,7 @@ class APIs{
 
 
      */
-    return $helper->call_endpoint("user", "create_cc", array("email", "nick"), $args);
+    return $this->helper->call_endpoint("user", "create_cc", array("email", "nick"), $args);
   }
   
   public function delete_addr($args){
@@ -245,7 +247,7 @@ class APIs{
 
 
      */
-    return $helper->call_endpoint("user", "delete_addr", array("email", "nick"), $args);
+    return $this->helper->call_endpoint("user", "delete_addr", array("email", "nick"), $args);
   }
   
   public function delete_cc($args){
@@ -259,7 +261,7 @@ class APIs{
 
 
      */
-    return $helper->call_endpoint("user", "delete_cc", array("email", "nick"), $args);
+    return $this->helper->call_endpoint("user", "delete_cc", array("email", "nick"), $args);
   }
   
   public function get_account_info($args){
@@ -272,7 +274,7 @@ class APIs{
 
 
      */
-    return $helper->call_endpoint("user", "get_account_info", array("email"), $args);
+    return $this->helper->call_endpoint("user", "get_account_info", array("email"), $args);
   }
   
   public function get_all_saved_addrs($args){
@@ -285,7 +287,7 @@ class APIs{
 
 
      */
-    return $helper->call_endpoint("user", "get_all_saved_addrs", array("email"), $args);
+    return $this->helper->call_endpoint("user", "get_all_saved_addrs", array("email"), $args);
   }
   
   public function get_all_saved_ccs($args){
@@ -298,7 +300,7 @@ class APIs{
 
 
      */
-    return $helper->call_endpoint("user", "get_all_saved_ccs", array("email"), $args);
+    return $this->helper->call_endpoint("user", "get_all_saved_ccs", array("email"), $args);
   }
   
   public function get_order($args){
@@ -312,7 +314,7 @@ class APIs{
 
 
      */
-    return $helper->call_endpoint("user", "get_order", array("email", "oid"), $args);
+    return $this->helper->call_endpoint("user", "get_order", array("email", "oid"), $args);
   }
   
   public function get_order_history($args){
@@ -325,7 +327,7 @@ class APIs{
 
 
      */
-    return $helper->call_endpoint("user", "get_order_history", array("email"), $args);
+    return $this->helper->call_endpoint("user", "get_order_history", array("email"), $args);
   }
   
   public function get_saved_addr($args){
@@ -339,7 +341,7 @@ class APIs{
 
 
      */
-    return $helper->call_endpoint("user", "get_saved_addr", array("email", "nick"), $args);
+    return $this->helper->call_endpoint("user", "get_saved_addr", array("email", "nick"), $args);
   }
   
   public function get_saved_cc($args){
@@ -353,7 +355,7 @@ class APIs{
 
 
      */
-    return $helper->call_endpoint("user", "get_saved_cc", array("email", "nick"), $args);
+    return $this->helper->call_endpoint("user", "get_saved_cc", array("email", "nick"), $args);
   }
   
   
