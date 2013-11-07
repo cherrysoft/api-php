@@ -19,7 +19,7 @@ class APIHelper{
 
 
   public function __construct($api_key, $servers){
-    $this->ENDPOINT_INFO = json_decode(file_get_contents(dirname(__FILE__) . "\schemas.json"), true);
+    $this->ENDPOINT_INFO = json_decode(file_get_contents(dirname(__FILE__) . "/schemas.json"), true);
     $this->methods = array("GET" => HttpRequest::METH_GET,
                             "POST" => HttpRequest::METH_POST,
                             "PUT" => HttpRequest::METH_PUT,
