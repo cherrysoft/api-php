@@ -102,7 +102,7 @@ class Environment
     function createSchema($data, $schema = null, $uri = '')
     {
         $uri = JSV::formatURI($uri);
-        
+ 
         if ($data instanceof JSONSchema && (!$uri || $data->getUri() === $uri) && (!$schema || $data->getSchema()->equals($schema))) {
             return $data;
         }

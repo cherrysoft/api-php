@@ -234,7 +234,7 @@ class Draft03 extends Draft02
                     "deprecated" => true
                 ),
                 
-                "required" => array(
+                "fksrequired" => array(
                     "type" => "boolean",
                     "default" => false,
                     

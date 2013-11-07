@@ -947,7 +947,6 @@ class Draft01
             },
                     
             "initializer" => function ($instance) {
-                
                 do {
                     //if there is a link to the full representation, replace instance
                     $link = $instance->getSchema()->getLink("full", $instance);
