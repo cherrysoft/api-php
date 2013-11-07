@@ -19,7 +19,7 @@ use Pyrus\JsonSchema\JSV\Exception, Pyrus\JsonSchema\JSV\ValidationException,
 
 class Draft04 extends Draft03{
 
-  function __costruct($register = true){
+  function __construct($register = true){
     return parent::__construct($register);
   }
 
@@ -132,7 +132,8 @@ class Draft04 extends Draft03{
                                 if(JS\is_json_object($instance->getValue())){
                                   $required = $schema->getAttribute("required");
                                   foreach($required as $req){
-                                    if($instance->getProperty($req) === null){
+                                    $prop = $instance->getProperty($req);
+                                    if($prop === null || ! $prop->getValue() ){
                                       $report->addError($instance, $schema, "required",
                                                         "Required property \"$req\" not provided" .
                                                         " [schema path: " . $instance->getPath() . "]", $required);
@@ -206,6 +207,7 @@ class Draft04 extends Draft03{
                                                                               $temp_report->errors);
                                     }
                                   }
+
                                   if(!$found){
                                     $report->addError($instance, $schema, "oneOf",
                                                       "Object did not match any element of the 'oneOf' array" .
@@ -258,8 +260,6 @@ class Draft04 extends Draft03{
       $arr['id'] = "http://json-schema.org/draft-04/links#";
         
       $arr['properties']['href']['required'] = true;
-      $arr['properties']['format'] = 'link-description-object-template';
-      $arr['properties']['rel']['required'] = true;
       $arr['properties']['properties']['deprecated'] = true;
       $arr['schema']['$ref'] = "http://json-schema.org/draft-04/hyper-schema#";
       return $arr;
