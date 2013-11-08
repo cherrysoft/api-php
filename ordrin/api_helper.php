@@ -45,9 +45,14 @@ class APIHelper{
     }
     $request = new HttpRequest($full_url, $this->methods[$method]);
     $request->addHeaders($headers);
+
+    if( gettype( $data ) === 'array' ) {
+      $data = http_build_query( $data );  
+    }
+
     switch($method){
     case "POST" : $request->setPostFields($data); break;
-    case "PUT" : $request->setPutData($data); break;
+    case "PUT" : $request->setPutData($data); $request->setContentType('application/x-www-form-urlencoded'); break;
     default :break;
     }
     $message = $request->send();
