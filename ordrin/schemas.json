@@ -1026,7 +1026,7 @@
           "type": "string",
           "description": "Ordr.in's unique order id number.",
           "formatDescription": "A number",
-          "pattern": "^[0-9]+$"
+          "pattern": "^\\w+$"
         }
       }
     },
