@@ -107,12 +107,12 @@ be sent to, and must be set to either `Ordrin::APIs::PRODUCTION` or `Ordrin::API
 - `args["current_password"]` : The user's current password
 
 ###### Either
-- `args["phone"]` : The customer's phone number
-- `args["zip"]` : The zip code part of the address (5 digits)
 - `args["addr"]` : The street address
 - `args["addr2"]` : The second part of the street address, if needed
 - `args["city"]` : The city part of the address
+- `args["phone"]` : The customer's phone number
 - `args["state"]` : The state part of the address (Two letters)
+- `args["zip"]` : The zip code part of the address (5 digits)
 
 ###### Or
 - `args["nick"]` : The delivery location nickname. (From the user's addresses)
@@ -120,16 +120,16 @@ be sent to, and must be set to either `Ordrin::APIs::PRODUCTION` or `Ordrin::API
 
 
 ###### Either
-- `args["card_name"]` : Full name as it appears on the credit card
-- `args["card_number"]` : Credit card number (16 digits)
-- `args["card_cvc"]` : 3 or 4 digit security code (3 or 4 digits)
-- `args["card_expiry"]` : The credit card expiration date. (mm/yyyy)
 - `args["card_bill_addr"]` : The credit card's billing street address
 - `args["card_bill_addr2"]` : The second part of the credit card's biling street address.
 - `args["card_bill_city"]` : The credit card's billing city
+- `args["card_bill_phone"]` : The credit card's billing phone number
 - `args["card_bill_state"]` : The credit card's billing state (2 letters)
 - `args["card_bill_zip"]` : The credit card's billing zip code (5 digits)
-- `args["card_bill_phone"]` : The credit card's billing phone number
+- `args["card_cvc"]` : 3 or 4 digit security code (3 or 4 digits)
+- `args["card_expiry"]` : The credit card expiration date. (mm/yyyy)
+- `args["card_name"]` : Full name as it appears on the credit card
+- `args["card_number"]` : Credit card number (16 digits)
 
 ###### Or
 - `args["card_nick"]` : The credit card nickname. (From the user's credit cards)
@@ -325,4 +325,5 @@ be sent to, and must be set to either `Ordrin::APIs::PRODUCTION` or `Ordrin::API
 - `args["email"]` : The user's email address
 - `args["nick"]` : The nickname of this address
 - `args["current_password"]` : The user's current password
+
 
